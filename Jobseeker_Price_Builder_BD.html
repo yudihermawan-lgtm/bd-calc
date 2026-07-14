@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>J-Software — Price Builder (BD)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#1A1F71;
+    --indigo-soft:#5A5F94;
+    --magenta:#E6007E;
+    --blue:#3D5AF1;
+    --panel:#EFF0FA;
+    --shade:#F3F4FB;
+    --line:#E6E7F2;
+    --muted:#767C93;
+    --white:#fff;
+    --page:#F7F7FB;
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--page);
+    font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    color:var(--indigo);
+    -webkit-font-smoothing:antialiased;
+    padding:28px 20px 56px;
+  }
+  .shell{max-width:1180px;margin:0 auto}
+  .card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:34px 36px 30px;
+    box-shadow:0 1px 2px rgba(26,31,113,.04);
+  }
+  .head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+  h1{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:0}
+  .badge{
+    background:#FDE7F2;color:var(--magenta);
+    font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+    padding:11px 18px;border-radius:999px;white-space:nowrap;
+  }
+  .lede{color:var(--muted);font-size:16px;line-height:1.55;max-width:640px;margin:14px 0 26px}
+  .grid{display:grid;grid-template-columns:315px 1fr;gap:40px;align-items:start}
+
+  /* ---------- left panel ---------- */
+  .panel{background:var(--panel);border-radius:20px;padding:24px 22px}
+  .flabel{font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--indigo);margin-bottom:9px}
+  .num{
+    width:100%;background:var(--white);border:1px solid #DEE0EE;border-radius:12px;
+    padding:14px 16px;font-family:inherit;font-size:26px;font-weight:800;color:var(--indigo);
+    letter-spacing:-.01em;
+  }
+  .num:focus{outline:3px solid rgba(230,0,126,.35);outline-offset:1px;border-color:var(--magenta)}
+  .hint{color:var(--muted);font-size:13px;line-height:1.45;margin:8px 0 20px}
+  .sect{font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;margin:4px 0 12px}
+  .opt{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px;cursor:pointer}
+  .opt input{
+    appearance:none;-webkit-appearance:none;min-width:19px;height:19px;margin:1px 0 0;
+    border:2px solid #B9BCD4;border-radius:5px;background:var(--white);cursor:pointer;position:relative;
+  }
+  .opt input:checked{background:var(--magenta);border-color:var(--magenta)}
+  .opt.hris input:checked{background:var(--blue);border-color:var(--blue)}
+  .opt input:checked::after{
+    content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;
+    border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(43deg);
+  }
+  .opt input:focus-visible{outline:3px solid rgba(26,31,113,.35);outline-offset:2px}
+  .opt span{font-size:12.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;line-height:1.35}
+  .opt.ats span{color:var(--magenta)}
+  .opt.hris span{color:var(--blue)}
+  .opt.mod span{color:var(--indigo);letter-spacing:.02em}
+  .opt.off{opacity:.42;cursor:not-allowed}
+  .opt.off input{cursor:not-allowed}
+  .rule{border:0;border-top:1px solid #DEE0EE;margin:20px 0}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;background:#DCDEEC;margin:6px 0 0;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--magenta);
+    cursor:pointer;border:0;box-shadow:0 1px 3px rgba(230,0,126,.4);
+  }
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--magenta);cursor:pointer;border:0}
+  input[type=range]:focus-visible{outline:3px solid rgba(230,0,126,.35);outline-offset:4px}
+
+  /* ---------- right side ---------- */
+  .tierbar{display:flex;align-items:baseline;gap:14px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+  .tier{font-size:40px;font-weight:800;letter-spacing:-.025em;line-height:1}
+  .setby{color:var(--muted);font-size:14px}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:22px 0 30px}
+  .kpi{background:var(--shade);border-radius:16px;padding:18px 20px}
+  .kpi .k{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+  .kpi .v{font-size:29px;font-weight:800;letter-spacing:-.02em;margin-top:8px}
+  .kpi.dark{background:var(--indigo)}
+  .kpi.dark .k{color:#A9AEDB}
+  .kpi.dark .v{color:#fff}
+
+  h2{font-size:19px;font-weight:800;margin:0 0 4px}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th{
+    font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+    text-align:left;padding:12px 0;border-bottom:1px solid var(--line);
+  }
+  th.r,td.r{text-align:right}
+  td{padding:15px 0;border-bottom:1px solid var(--line);font-size:15.5px;vertical-align:middle}
+  td.calc{color:var(--muted);font-size:14px;text-align:right;padding-right:26px;white-space:nowrap}
+  td.amt{font-weight:800;font-size:16px;width:110px}
+  .lead{font-weight:800}
+  .comp{display:flex;align-items:center;gap:10px}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .dot.b{background:var(--blue)}
+  .dot.m{background:var(--magenta)}
+  .dot.i{background:var(--indigo)}
+  tr.total td{background:var(--shade);font-weight:800;padding-left:18px;border-bottom:1px solid var(--line)}
+  tr.total td:first-child{border-radius:10px 0 0 10px}
+  tr.total td:last-child{border-radius:0 10px 10px 0;padding-right:18px}
+  tr.total td.calc{font-weight:500}
+  tr.neg td.amt,tr.neg td:first-child{color:var(--magenta)}
+  tr.guard td:first-child,tr.guard td.amt{color:var(--blue)}
+  .foot{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+  .foot .kpi .v{font-size:25px}
+  .rules{
+    margin-top:26px;padding-top:18px;border-top:1px solid var(--line);
+    color:var(--muted);font-size:13.5px;line-height:1.6;
+  }
+  .rules b{color:var(--indigo);font-weight:700}
+  .empty{
+    background:var(--shade);border-radius:16px;padding:34px;text-align:center;color:var(--muted);
+    font-size:15px;margin-top:24px;
+  }
+  .empty b{display:block;color:var(--indigo);font-size:18px;margin-bottom:6px}
+  .hide{display:none}
+  @media (max-width:900px){
+    body{padding:16px 12px 40px}
+    .card{padding:24px 20px}
+    .grid{grid-template-columns:1fr;gap:26px}
+    .kpis{grid-template-columns:1fr}
+    .foot{grid-template-columns:1fr}
+    .tier{font-size:32px}
+    td.calc{font-size:12.5px;white-space:normal;padding-right:12px}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    .kpi .v{transition:color .15s ease}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="card">
+
+    <div class="head">
+      <h1>Price builder</h1>
+      <div class="badge">Two numbers. Get the quote.</div>
+    </div>
+    <p class="lede">Enter the client's headcount and their hiring volume for the year, switch on the meters they actually run, and the quote builds itself. The floor price is the lowest number you can sign without CEO approval.</p>
+
+    <div class="grid">
+
+      <!-- LEFT -->
+      <div class="panel">
+        <div class="flabel">Employees managed</div>
+        <input class="num" id="emp" type="number" min="0" max="1000000" step="1" value="1200" inputmode="numeric" aria-label="Employees managed">
+        <p class="hint">Goes in the contract. No unlimited usage.</p>
+
+        <div class="flabel">Annual hires</div>
+        <input class="num" id="hire" type="number" min="0" max="200000" step="1" value="300" inputmode="numeric" aria-label="Annual hires">
+        <p class="hint">The committed number. We count the real one ourselves.</p>
+
+        <div class="sect">Meters the client runs</div>
+        <label class="opt ats"><input type="checkbox" id="mAts" checked><span>Recruitment (ATS) — turns the hiring fee on</span></label>
+        <label class="opt hris"><input type="checkbox" id="mHris" checked><span>Workforce (HRIS) — turns the workforce fee on</span></label>
+
+        <hr class="rule">
+
+        <div class="sect">Add-on modules</div>
+        <label class="opt mod" id="lPay"><input type="checkbox" id="aPay"><span>Payroll &amp; Attendance — Rp 2,500/emp/mo</span></label>
+        <label class="opt mod" id="lPms"><input type="checkbox" id="aPms"><span>PMS — Rp 1,500/emp/mo</span></label>
+        <label class="opt mod" id="lLms"><input type="checkbox" id="aLms"><span>LMS — Rp 1,500/emp/mo</span></label>
+        <p class="hint" id="modHint">Core HRIS is already in the workforce fee — these are the modules on top of it.</p>
+
+        <hr class="rule">
+
+        <div class="flabel" id="discLabel">Discount on platform fee — 0% — list price</div>
+        <input type="range" id="disc" min="0" max="15" step="1" value="0" aria-label="Discount on platform fee, percent">
+        <p class="hint">The only lever BD has, capped at 15%. The workforce fee, the hiring fee, the setup fee and add-ons are never discounted.</p>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="tierbar">
+          <div>
+            <div class="eyebrow">Tier</div>
+            <div class="tier" id="tier">Growth</div>
+          </div>
+          <div class="setby" id="setBy">set by both meters</div>
+        </div>
+
+        <div id="quote">
+          <div class="kpis">
+            <div class="kpi"><div class="k">Annual subscription</div><div class="v" id="kSub">Rp 243.4jt</div></div>
+            <div class="kpi"><div class="k">Setup fee (one-time)</div><div class="v" id="kSetup">Rp 40jt</div></div>
+            <div class="kpi dark"><div class="k">Year-1 TCV</div><div class="v" id="kTcv">Rp 283.4jt</div></div>
+          </div>
+
+          <h2>How this price is built</h2>
+          <table>
+            <thead>
+              <tr><th>Component</th><th class="r">Calculation</th><th class="r">Rp jt / year</th></tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+
+          <div class="foot">
+            <div class="kpi"><div class="k">Floor price — 15% off platform</div><div class="v" id="kFloor">Rp 226.9jt</div></div>
+            <div class="kpi"><div class="k">BD commission (proposed)</div><div class="v" id="kComm">Rp 19.8jt (7%)</div></div>
+          </div>
+        </div>
+
+        <div class="empty hide" id="empty">
+          <b>Switch on at least one meter.</b>
+          A client is either recruiting, managing a workforce, or both. Without a meter there is nothing to price.
+        </div>
+
+        <p class="rules">
+          <b>Setup fee is mandatory and never waived.</b> The employee count and the hire count are written into the PKS and trued up at renewal — there is no unlimited usage. Commission is paid on <b>cash collected</b>, not booked value. Anything below the floor price is <b>CEO approval only</b>.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var INF = Infinity;
+
+  // ---- RATE CARD (source: PROPOSED PRICING FOR SOFTWARE — tabs 2, 3, 6, 10) ----
+  var WORKFORCE = [ // Rp / employee / month, marginal bands
+    {lo:1,     hi:500,    rate:8000},
+    {lo:501,   hi:2000,   rate:6000},
+    {lo:2001,  hi:10000,  rate:3500},
+    {lo:10001, hi:50000,  rate:2000},
+    {lo:50001, hi:INF,    rate:1200}
+  ];
+  var HIRING = [ // Rp / hire / year, marginal bands
+    {lo:1,     hi:100,    rate:150000},
+    {lo:101,   hi:500,    rate:100000},
+    {lo:501,   hi:2000,   rate:60000},
+    {lo:2001,  hi:10000,  rate:40000},
+    {lo:10001, hi:INF,    rate:25000}
+  ];
+  // TIER LADDER. The tier is the SIZE OF THE COMPANY, not the size of the invoice.
+  // Headcount bands come straight from the rate card (tab 2A).
+  // The hiring ladder is the same ladder read at a normal 30%/yr turnover:
+  //   500 emp -> 150 hires | 2,000 emp -> 600 hires | 10,000 emp -> 3,000 hires.
+  // NOTE: the hiring PRICE bands below (1-100 / 101-500 / ...) set the RATE, not the TIER.
+  var TIERS = [
+    {name:"Essential",        empLo:1,     empHi:500,   hireLo:1,    hireHi:150,  platform:70,  setup:15,  min:90,   comm:0.06},
+    {name:"Growth",           empLo:501,   empHi:2000,  hireLo:151,  hireHi:600,  platform:110, setup:40,  min:180,  comm:0.07},
+    {name:"Enterprise",       empLo:2001,  empHi:10000, hireLo:601,  hireHi:3000, platform:180, setup:90,  min:400,  comm:0.08},
+    {name:"Enterprise Scale", empLo:10001, empHi:INF,   hireLo:3001, hireHi:INF,  platform:350, setup:200, min:1000, comm:0.08}
+  ];
+  var MODULES = [
+    {id:"aPay", label:"Payroll &amp; Attendance", rate:2500},
+    {id:"aPms", label:"PMS",                      rate:1500},
+    {id:"aLms", label:"LMS",                      rate:1500}
+  ];
+  var MAX_DISCOUNT = 0.15;
+
+  // ---- helpers ----
+  var $ = function(id){ return document.getElementById(id); };
+  var n0 = function(v){ return Math.round(v).toLocaleString("en-US"); };
+  var jt = function(v){ // Rp jt, 1 decimal, no trailing .0
+    var r = Math.round(v*10)/10;
+    return "Rp " + (r % 1 === 0 ? r.toFixed(0) : r.toFixed(1)) + "jt";
+  };
+  var cell = function(v){ var r = Math.round(v*10)/10; return (r % 1 === 0 ? r.toFixed(1) : r.toFixed(1)); };
+
+  function slices(qty, bands, months){
+    var out = [], i;
+    for(i=0;i<bands.length;i++){
+      var b = bands[i];
+      if(qty >= b.lo){
+        var units = Math.min(qty, b.hi) - b.lo + 1;
+        out.push({band:i+1, units:units, rate:b.rate, jt: units * b.rate * months / 1e6});
+      }
+    }
+    return out;
+  }
+  function tierIndexBy(qty, loKey, hiKey){
+    for(var i=0;i<TIERS.length;i++){
+      if(qty >= TIERS[i][loKey] && qty <= TIERS[i][hiKey]) return i;
+    }
+    return 0;
+  }
+  function readInt(el, max){
+    var v = parseInt(el.value, 10);
+    if(isNaN(v) || v < 0) v = 0;
+    if(v > max) v = max;
+    return v;
+  }
+
+  // ---- engine ----
+  function build(){
+    var emp   = readInt($("emp"),  1000000);
+    var hires = readInt($("hire"), 200000);
+    var ats   = $("mAts").checked;
+    var hris  = $("mHris").checked;
+    var d     = parseInt($("disc").value, 10) / 100;
+
+    // modules are per-employee, so they need the workforce meter
+    MODULES.forEach(function(m){
+      var box = $(m.id), lab = box.parentNode;
+      box.disabled = !hris;
+      lab.classList.toggle("off", !hris);
+      if(!hris) box.checked = false;
+    });
+    $("modHint").textContent = hris
+      ? "Core HRIS is already in the workforce fee — these are the modules on top of it."
+      : "Modules are priced per employee. Switch the workforce meter on to sell them.";
+
+    if(!ats && !hris){
+      $("quote").classList.add("hide");
+      $("empty").classList.remove("hide");
+      $("tier").textContent = "—";
+      $("setBy").textContent = "no meter running";
+      $("rows").innerHTML = "";
+      $("discLabel").textContent = "Discount on platform fee — " + Math.round(d*100) + "% — list price";
+      return;
+    }
+    $("quote").classList.remove("hide");
+    $("empty").classList.add("hide");
+
+    // tier = the higher of the two meters, counting only the meters that are on
+    var iEmp = hris ? tierIndexBy(emp,   "empLo",  "empHi")  : -1;
+    var iHire = ats ? tierIndexBy(hires, "hireLo", "hireHi") : -1;
+    var t = TIERS[Math.max(iEmp, iHire)];
+
+    // The minimum contract is a floor on the workforce we carry — the hiring meter already
+    // prices hiring volume. So it follows the HEADCOUNT tier, never the hiring tier.
+    // (This reproduces the V6 price book exactly, and it stops a high-turnover SME from
+    //  being thrown a Rp 400jt minimum it has no business paying.)
+    var minTier = hris ? TIERS[iEmp] : TIERS[0];
+    var minContract = minTier.min;
+
+    var wf = hris ? slices(emp,   WORKFORCE, 12) : [];
+    var hf = ats  ? slices(hires, HIRING,     1) : [];
+    var wfTotal = wf.reduce(function(s,x){ return s + x.jt; }, 0);
+    var hfTotal = hf.reduce(function(s,x){ return s + x.jt; }, 0);
+
+    var mods = [];
+    if(hris){
+      MODULES.forEach(function(m){
+        if($(m.id).checked) mods.push({label:m.label, rate:m.rate, jt: emp * m.rate * 12 / 1e6});
+      });
+    }
+    var modTotal = mods.reduce(function(s,x){ return s + x.jt; }, 0);
+
+    var discAmt = t.platform * d;
+    var rawList = t.platform + wfTotal + hfTotal + modTotal;   // list, before minimum
+    var listSub = Math.max(rawList, minContract);              // minimum contract holds
+    var topUp   = listSub - rawList;
+    var sub     = Math.max(listSub - discAmt, minContract);    // discount can never break the minimum
+    var applied = listSub - sub;                               // discount that actually lands
+    var blocked = discAmt > applied + 1e-9;
+    var tcv     = sub + t.setup;
+    var floor   = Math.max(listSub - t.platform * MAX_DISCOUNT, minContract);
+    var comm    = tcv * t.comm;
+
+    // ---- render ----
+    $("tier").textContent = t.name;
+    $("setBy").textContent = (ats && hris)
+      ? (iEmp === iHire ? "set by both meters" : (iEmp > iHire ? "set by employees" : "set by hires"))
+      : (hris ? "set by employees" : "set by hires");
+
+    $("kSub").textContent   = jt(sub);
+    $("kSetup").textContent = jt(t.setup);
+    $("kTcv").textContent   = jt(tcv);
+    $("kFloor").textContent = jt(floor);
+    $("kComm").textContent  = jt(comm) + " (" + Math.round(t.comm*100) + "%)";
+
+    $("discLabel").textContent = "Discount on platform fee — " + Math.round(d*100) + "% — "
+      + (d === 0 ? "list price" : "−" + jt(discAmt).replace("Rp ",""));
+
+    var html = "";
+    html += '<tr><td class="lead">Platform fee — ' + t.name + '</td>'
+          + '<td class="calc">list price</td><td class="amt r">' + cell(t.platform) + '</td></tr>';
+
+    if(d > 0){
+      html += '<tr class="neg"><td>Discount on platform fee</td>'
+            + '<td class="calc">' + Math.round(d*100) + '% × ' + jt(t.platform) + '</td>'
+            + '<td class="amt r">−' + cell(discAmt) + '</td></tr>';
+    }
+    wf.forEach(function(b){
+      html += '<tr><td><span class="comp"><span class="dot b"></span>Workforce fee — band ' + b.band + '</span></td>'
+            + '<td class="calc">' + n0(b.units) + ' emp × Rp ' + n0(b.rate) + ' × 12 mo</td>'
+            + '<td class="amt r">' + cell(b.jt) + '</td></tr>';
+    });
+    hf.forEach(function(b){
+      html += '<tr><td><span class="comp"><span class="dot m"></span>Hiring fee — band ' + b.band + '</span></td>'
+            + '<td class="calc">' + n0(b.units) + ' hires × Rp ' + n0(b.rate) + '</td>'
+            + '<td class="amt r">' + cell(b.jt) + '</td></tr>';
+    });
+    mods.forEach(function(m){
+      html += '<tr><td><span class="comp"><span class="dot i"></span>' + m.label + '</span></td>'
+            + '<td class="calc">' + n0(emp) + ' emp × Rp ' + n0(m.rate) + ' × 12 mo</td>'
+            + '<td class="amt r">' + cell(m.jt) + '</td></tr>';
+    });
+    if(topUp > 0.049 || blocked){
+      var guardAmt = topUp + (blocked ? (discAmt - applied) : 0);
+      var guardTxt = blocked
+        ? 'the discount cannot take the deal below ' + jt(minContract)
+        : 'the deal cannot close below ' + jt(minContract);
+      html += '<tr class="guard"><td>Minimum contract — ' + minTier.name + ' workforce</td>'
+            + '<td class="calc">' + guardTxt + '</td>'
+            + '<td class="amt r">+' + cell(guardAmt) + '</td></tr>';
+    }
+    html += '<tr class="total"><td>Annual subscription</td><td class="calc"></td>'
+          + '<td class="amt r">' + cell(sub) + '</td></tr>';
+    html += '<tr><td>Setup fee — one-time, never waived</td>'
+          + '<td class="calc">' + t.name + '</td><td class="amt r">' + cell(t.setup) + '</td></tr>';
+    html += '<tr class="total"><td>Year-1 total contract value</td>'
+          + '<td class="calc">subscription + setup</td><td class="amt r">' + cell(tcv) + '</td></tr>';
+
+    $("rows").innerHTML = html;
+  }
+
+  ["emp","hire","mAts","mHris","aPay","aPms","aLms","disc"].forEach(function(id){
+    $(id).addEventListener("input", build);
+    $(id).addEventListener("change", build);
+  });
+  build();
+})();
+</script>
+</body>
+</html>
