@@ -41,7 +41,10 @@ const forbidden = [
   /commercial verdict/i,
   /ceo approval/i,
 ];
-for (const pattern of forbidden) assert.doesNotMatch(guide, pattern);
+for (const pattern of forbidden) {
+  assert.doesNotMatch(guide, pattern);
+  assert.doesNotMatch(index, pattern);
+}
 
 const calculatorPresentationForbidden = [
   /floor price/i,
