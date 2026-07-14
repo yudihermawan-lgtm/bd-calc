@@ -4,9 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>J-Software — Price Builder (BD)</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --indigo:#1A1F71;
@@ -18,25 +15,54 @@
     --line:#E6E7F2;
     --muted:#767C93;
     --white:#fff;
-    --page:#F7F7FB;
+    --page:#F8F5EF;
+    --warm:#FFF9F2;
     --radius:22px;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
-    background:var(--page);
-    font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(circle at 7% 2%, rgba(230,0,126,.07), transparent 24rem),
+      radial-gradient(circle at 94% 18%, rgba(61,90,241,.08), transparent 28rem),
+      var(--page);
+    font-family:'Segoe UI','Avenir Next',Avenir,-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
     color:var(--indigo);
     -webkit-font-smoothing:antialiased;
-    padding:28px 20px 56px;
+    padding:24px 20px 56px;
   }
-  .shell{max-width:1180px;margin:0 auto}
+  .shell{max-width:1180px;margin:0 auto;position:relative}
+  .site-nav{
+    min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+    margin-bottom:18px;padding:12px 4px;
+  }
+  .brand{display:inline-flex;align-items:center;border-radius:12px}
+  .brand img{display:block;width:176px;max-width:42vw;height:auto}
+  .nav-actions{display:flex;align-items:center;justify-content:flex-end;gap:18px}
+  .tool-label{
+    color:var(--indigo-soft);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .guide-link{
+    display:inline-flex;align-items:center;gap:8px;color:var(--indigo);background:var(--white);
+    border:1px solid rgba(26,31,113,.16);border-radius:999px;padding:11px 16px;
+    font-size:13px;font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(26,31,113,.07);
+    transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease;
+  }
+  .guide-link:hover{transform:translateY(-2px);border-color:var(--magenta);box-shadow:0 10px 28px rgba(26,31,113,.11)}
+  .brand:focus-visible,.guide-link:focus-visible{
+    outline:3px solid rgba(230,0,126,.38);outline-offset:4px;
+  }
   .card{
     background:var(--white);
     border:1px solid var(--line);
     border-radius:var(--radius);
     padding:34px 36px 30px;
-    box-shadow:0 1px 2px rgba(26,31,113,.04);
+    box-shadow:0 24px 70px rgba(26,31,113,.1),0 2px 8px rgba(26,31,113,.04);
+    overflow:hidden;position:relative;
+  }
+  .card::before{
+    content:"";position:absolute;inset:0 0 auto;height:5px;
+    background:linear-gradient(90deg,var(--magenta) 0 36%,var(--blue) 36% 70%,var(--indigo) 70%);
   }
   .head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
   h1{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:0}
@@ -46,17 +72,26 @@
     padding:11px 18px;border-radius:999px;white-space:nowrap;
   }
   .lede{color:var(--muted);font-size:16px;line-height:1.55;max-width:640px;margin:14px 0 26px}
-  .grid{display:grid;grid-template-columns:315px 1fr;gap:40px;align-items:start}
+  .grid{display:grid;grid-template-columns:315px minmax(0,1fr);gap:40px;align-items:start}
+  .grid > *{min-width:0}
 
   /* ---------- left panel ---------- */
-  .panel{background:var(--panel);border-radius:20px;padding:24px 22px}
+  .panel{background:var(--panel);border:1px solid rgba(26,31,113,.06);border-radius:20px;padding:22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+  .aming-tip{
+    display:flex;align-items:center;gap:12px;margin:0 0 22px;padding:10px 12px 10px 8px;
+    background:var(--warm);border:1px solid rgba(230,0,126,.12);border-radius:16px;
+  }
+  .aming-tip img{width:76px;max-width:30%;height:68px;object-fit:contain;object-position:center bottom;flex:none}
+  .aming-tip p{margin:0;color:var(--indigo-soft);font-size:11.5px;line-height:1.5}
+  .aming-tip strong{display:block;color:var(--indigo);font-size:12.5px;margin-bottom:2px}
   .flabel{font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--indigo);margin-bottom:9px}
   .num{
     width:100%;background:var(--white);border:1px solid #DEE0EE;border-radius:12px;
     padding:14px 16px;font-family:inherit;font-size:26px;font-weight:800;color:var(--indigo);
     letter-spacing:-.01em;
   }
-  .num:focus{outline:3px solid rgba(230,0,126,.35);outline-offset:1px;border-color:var(--magenta)}
+  .num:hover{border-color:#B9BCD4}
+  .num:focus-visible{outline:3px solid rgba(230,0,126,.35);outline-offset:2px;border-color:var(--magenta)}
   .hint{color:var(--muted);font-size:13px;line-height:1.45;margin:8px 0 20px}
   .sect{font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;margin:4px 0 12px}
   .opt{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px;cursor:pointer}
@@ -89,19 +124,21 @@
   input[type=range]:focus-visible{outline:3px solid rgba(230,0,126,.35);outline-offset:4px}
 
   /* ---------- right side ---------- */
-  .tierbar{display:flex;align-items:baseline;gap:14px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+  .tierbar{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;padding:4px 0 22px;border-bottom:1px solid var(--line)}
   .eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
   .tier{font-size:40px;font-weight:800;letter-spacing:-.025em;line-height:1}
   .setby{color:var(--muted);font-size:14px}
   .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:22px 0 30px}
-  .kpi{background:var(--shade);border-radius:16px;padding:18px 20px}
+  .kpi{background:var(--shade);border:1px solid rgba(26,31,113,.04);border-radius:16px;padding:18px 20px}
   .kpi .k{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
   .kpi .v{font-size:29px;font-weight:800;letter-spacing:-.02em;margin-top:8px}
-  .kpi.dark{background:var(--indigo)}
+  .kpi.dark{background:var(--indigo);border-color:var(--indigo);box-shadow:0 14px 30px rgba(26,31,113,.16)}
   .kpi.dark .k{color:#A9AEDB}
   .kpi.dark .v{color:#fff}
 
   h2{font-size:19px;font-weight:800;margin:0 0 4px}
+  .table-wrap{width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+  .table-wrap:focus-visible{outline:3px solid rgba(61,90,241,.3);outline-offset:4px;border-radius:10px}
   table{width:100%;border-collapse:collapse;margin-top:10px}
   th{
     font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
@@ -139,38 +176,92 @@
   @media (max-width:900px){
     body{padding:16px 12px 40px}
     .card{padding:24px 20px}
-    .grid{grid-template-columns:1fr;gap:26px}
+    .grid{grid-template-columns:minmax(0,1fr);gap:26px}
     .kpis{grid-template-columns:1fr}
     .foot{grid-template-columns:1fr}
     .tier{font-size:32px}
     td.calc{font-size:12.5px;white-space:normal;padding-right:12px}
   }
+  @media (max-width:600px){
+    body{padding:10px 10px 32px}
+    .site-nav{min-height:0;align-items:flex-start;margin-bottom:10px;padding:8px 2px}
+    .brand img{width:132px;max-width:38vw}
+    .nav-actions{align-items:flex-end;gap:7px;flex-direction:column}
+    .tool-label{font-size:9px;letter-spacing:.08em}
+    .guide-link{font-size:11.5px;padding:9px 12px}
+    .card{padding:24px 14px 20px;border-radius:18px}
+    .head{gap:12px}
+    h1{font-size:25px}
+    .badge{font-size:9.5px;padding:8px 11px;white-space:normal}
+    .lede{font-size:14px;margin:12px 0 22px}
+    .grid{gap:22px}
+    .panel{padding:16px 14px;border-radius:16px}
+    .aming-tip{padding:8px;margin-bottom:18px}
+    .aming-tip img{width:62px;height:58px}
+    .aming-tip p{font-size:10.5px}
+    .aming-tip strong{font-size:11.5px}
+    .num{font-size:23px;padding:12px 13px}
+    .opt span{font-size:11.5px}
+    .tierbar{align-items:flex-start;flex-direction:column;gap:6px}
+    .tier{font-size:30px;overflow-wrap:anywhere}
+    .kpis{gap:10px;margin:18px 0 24px}
+    .kpi{padding:15px 16px}
+    .kpi .v{font-size:25px;overflow-wrap:anywhere}
+    .foot .kpi .v{font-size:22px}
+    h2{font-size:17px}
+    .table-wrap{margin-inline:-2px;padding-bottom:6px}
+    table{min-width:610px}
+    th{font-size:9.5px;padding:10px 8px}
+    td{font-size:12.5px;padding:12px 8px}
+    td.calc{font-size:10.5px;padding-right:10px;white-space:nowrap}
+    td.amt{font-size:13px;width:92px}
+    tr.total td{padding-left:10px}
+    tr.total td:last-child{padding-right:10px}
+    .rules{font-size:12px}
+    .empty{padding:26px 16px}
+  }
   @media (prefers-reduced-motion:no-preference){
     .kpi .v{transition:color .15s ease}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
   }
 </style>
 </head>
 <body>
 <div class="shell">
+  <header class="site-nav">
+    <a class="brand" href="sales-guide.html" aria-label="Jobseeker product guide">
+      <img src="jobseeker-logo_transparent.png" alt="Jobseeker Company">
+    </a>
+    <div class="nav-actions">
+      <span class="tool-label">Usage-based sales pricing tool</span>
+      <a class="guide-link" href="sales-guide.html">Panduan Produk <span aria-hidden="true">→</span></a>
+    </div>
+  </header>
   <div class="card">
 
     <div class="head">
       <h1>Price builder</h1>
       <div class="badge">Two numbers. Get the quote.</div>
     </div>
-    <p class="lede">Enter the client's headcount and their hiring volume for the year, switch on the meters they actually run, and the quote builds itself. The floor price is the lowest number you can sign without CEO approval.</p>
+    <p class="lede">Enter the client's headcount and annual hiring volume, select the services they need, and the quote builds itself from their expected usage.</p>
 
     <div class="grid">
 
       <!-- LEFT -->
       <div class="panel">
+        <aside class="aming-tip" aria-label="Sales tip">
+          <img src="aming-official-transparent.png" alt="Aming, Jobseeker’s friendly sales assistant">
+          <p><strong>Mulai dari dua angka.</strong> Masukkan jumlah karyawan dan kebutuhan rekrutmen tahunan untuk membangun referensi penawaran.</p>
+        </aside>
         <div class="flabel">Employees managed</div>
         <input class="num" id="emp" type="number" min="0" max="1000000" step="1" value="1200" inputmode="numeric" aria-label="Employees managed">
-        <p class="hint">Goes in the contract. No unlimited usage.</p>
+        <p class="hint">Employee commitments keep the quote aligned with the client&rsquo;s expected workforce usage.</p>
 
         <div class="flabel">Annual hires</div>
         <input class="num" id="hire" type="number" min="0" max="200000" step="1" value="300" inputmode="numeric" aria-label="Annual hires">
-        <p class="hint">The committed number. We count the real one ourselves.</p>
+        <p class="hint">Annual hiring commitments keep the quote aligned with the client&rsquo;s expected recruitment usage.</p>
 
         <div class="sect">Meters the client runs</div>
         <label class="opt ats"><input type="checkbox" id="mAts" checked><span>Recruitment (ATS) — turns the hiring fee on</span></label>
@@ -188,7 +279,7 @@
 
         <div class="flabel" id="discLabel">Discount on platform fee — 0% — list price</div>
         <input type="range" id="disc" min="0" max="15" step="1" value="0" aria-label="Discount on platform fee, percent">
-        <p class="hint">The only lever BD has, capped at 15%. The workforce fee, the hiring fee, the setup fee and add-ons are never discounted.</p>
+        <p class="hint">Discounts apply only to the platform fee and are capped at 15%. Workforce, hiring, setup, and add-on pricing remains unchanged.</p>
       </div>
 
       <!-- RIGHT -->
@@ -209,17 +300,16 @@
           </div>
 
           <h2>How this price is built</h2>
+          <div class="table-wrap" role="region" aria-label="Price calculation details" tabindex="0">
           <table>
             <thead>
               <tr><th>Component</th><th class="r">Calculation</th><th class="r">Rp jt / year</th></tr>
             </thead>
             <tbody id="rows"></tbody>
           </table>
-
-          <div class="foot">
-            <div class="kpi"><div class="k">Floor price — 15% off platform</div><div class="v" id="kFloor">Rp 226.9jt</div></div>
-            <div class="kpi"><div class="k">BD commission (proposed)</div><div class="v" id="kComm">Rp 19.8jt (7%)</div></div>
           </div>
+
+          <div hidden aria-hidden="true"><span id="kFloor"></span><span id="kComm"></span></div>
         </div>
 
         <div class="empty hide" id="empty">
@@ -228,7 +318,7 @@
         </div>
 
         <p class="rules">
-          <b>Setup fee is mandatory and never waived.</b> The employee count and the hire count are written into the PKS and trued up at renewal — there is no unlimited usage. Commission is paid on <b>cash collected</b>, not booked value. Anything below the floor price is <b>CEO approval only</b>.
+          <b>Setup is included in every first-year quote.</b> Employee and hire commitments are recorded in the agreement and reviewed at renewal, keeping pricing aligned with actual usage and the selected services.
         </p>
       </div>
 

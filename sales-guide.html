@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Panduan penjualan bilingual Jobseeker untuk memilih paket, menyesuaikan ruang lingkup, dan menyusun penawaran klien.">
+  <title>Panduan Paket Jobseeker</title>
+  <style>
+    :root {
+      --navy: #06177a;
+      --deep-navy: #071252;
+      --magenta: #e6007e;
+      --cream: #fffaf3;
+      --paper: #ffffff;
+      --ink: #11194f;
+      --muted: #626986;
+      --line: #dfe3f1;
+      --lime: #dfff66;
+      --shadow: 0 24px 60px rgba(7, 18, 82, 0.12);
+      --display: Georgia, Cambria, "Times New Roman", serif;
+      --body: "Segoe UI", "Avenir Next", Avenir, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+    body { margin: 0; color: var(--ink); background: var(--cream); font-family: var(--body); line-height: 1.6; }
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible {
+      outline: 3px solid var(--magenta);
+      outline-offset: 3px;
+      box-shadow: 0 0 0 6px #fff, 0 0 0 8px var(--deep-navy);
+    }
+    .container { width: min(1180px, calc(100% - 2.5rem)); margin-inline: auto; }
+    .eyebrow { margin: 0 0 .75rem; font-size: .74rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    .section-title { margin: 0; font: 700 clamp(2.2rem, 5vw, 4.7rem)/.98 var(--display); letter-spacing: -.04em; }
+    .section-lead { max-width: 46rem; margin: 1.25rem 0 0; color: var(--muted); font-size: 1.05rem; }
+    .section-head { display: grid; grid-template-columns: 1fr minmax(16rem, 28rem); gap: 2rem; align-items: end; margin-bottom: 3rem; }
+    .section-head .section-lead { margin: 0; }
+    .button { display: inline-flex; min-height: 3rem; align-items: center; justify-content: center; gap: .55rem; padding: .75rem 1.15rem; border: 2px solid transparent; border-radius: 999px; font-weight: 700; text-decoration: none; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { background: var(--magenta); color: #fff; box-shadow: 0 10px 26px rgba(230,0,126,.3); }
+    .button-secondary { border-color: rgba(255,255,255,.55); color: #fff; }
+    .button-light { background: #fff; color: var(--navy); }
+
+    .site-header { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid rgba(223,227,241,.8); background: rgba(255,250,243,.96); backdrop-filter: blur(12px); }
+    .header-inner { min-height: 4.75rem; display: flex; align-items: center; gap: 1.2rem; }
+    .brand { flex: 0 0 auto; }
+    .brand img { width: 150px; }
+    .site-nav { display: flex; gap: .15rem; margin-left: auto; }
+    .site-nav a { padding: .45rem .65rem; border-radius: .5rem; color: var(--muted); font-size: .88rem; font-weight: 600; text-decoration: none; }
+    .site-nav a:hover { color: var(--navy); background: #fff; }
+    .language-switch { display: inline-flex; padding: .2rem; border: 1px solid var(--line); border-radius: 999px; background: #fff; }
+    .language-switch button { min-width: 2.6rem; padding: .35rem .55rem; border: 0; border-radius: 999px; color: var(--muted); background: transparent; font: 700 .78rem var(--body); cursor: pointer; }
+    .language-switch button[aria-pressed="true"] { color: #fff; background: var(--navy); }
+    .header-cta { white-space: nowrap; font-size: .84rem; }
+
+    .hero { position: relative; overflow: hidden; color: #fff; background: var(--deep-navy); }
+    .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .22; background-image: radial-gradient(rgba(255,255,255,.65) .7px, transparent .7px); background-size: 18px 18px; }
+    .hero::after { content: ""; position: absolute; width: 34rem; height: 34rem; right: -16rem; top: -20rem; border: 6rem solid var(--magenta); border-radius: 50%; opacity: .8; }
+    .hero-grid { position: relative; z-index: 1; min-height: 650px; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr); align-items: end; gap: 2rem; padding-top: 5rem; }
+    .hero-copy { align-self: center; padding-bottom: 4rem; animation: rise .65s ease both; }
+    .hero .eyebrow { color: var(--lime); }
+    .hero h1 { max-width: 780px; margin: 0; font: 700 clamp(3.4rem, 7vw, 7rem)/.9 var(--display); letter-spacing: -.055em; }
+    .hero-text { max-width: 40rem; margin: 1.6rem 0 0; color: #dfe4ff; font-size: 1.1rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+    .aming-wrap { position: relative; align-self: end; animation: rise .8s .12s ease both; }
+    .aming-wrap::before { content: ""; position: absolute; inset: 18% 4% 5%; border-radius: 48% 48% 0 0; background: var(--magenta); transform: rotate(-3deg); }
+    .aming-wrap img { position: relative; z-index: 1; max-height: 590px; margin-left: auto; object-fit: contain; object-position: bottom; filter: drop-shadow(0 20px 22px rgba(0,0,0,.25)); }
+    .aming-note { position: absolute; z-index: 2; right: 0; bottom: 2rem; max-width: 12rem; padding: .7rem .85rem; border: 1px solid var(--deep-navy); background: var(--lime); color: var(--deep-navy); font-size: .8rem; font-weight: 700; transform: rotate(2deg); box-shadow: 7px 7px 0 var(--deep-navy); }
+
+    .journey { padding: 6rem 0; background: var(--paper); }
+    .journey-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 3rem; background: var(--line); border: 1px solid var(--line); }
+    .step { position: relative; padding: 2.2rem; background: var(--paper); }
+    .step-number { display: block; margin-bottom: 3rem; color: var(--magenta); font: 700 3.5rem/1 var(--display); }
+    .step h3 { margin: 0 0 .6rem; font: 700 1.45rem/1.15 var(--display); }
+    .step p { margin: 0; color: var(--muted); }
+
+    .pricing { padding: 7rem 0; background: var(--cream); }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: stretch; }
+    .tier { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 2rem; border: 1px solid var(--line); background: var(--paper); box-shadow: 0 1px 0 rgba(7,18,82,.04); }
+    .tier:nth-child(2) { border: 2px solid var(--magenta); box-shadow: var(--shadow); transform: translateY(-.7rem); }
+    .tier-badge { align-self: flex-start; margin-bottom: 1.2rem; padding: .28rem .55rem; color: var(--navy); background: var(--lime); font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .tier h3 { margin: 0; font: 700 2.3rem/1 var(--display); }
+    .tier-fit { min-height: 3.4rem; margin: .7rem 0 1.7rem; color: var(--muted); }
+    .price-line { display: flex; justify-content: space-between; gap: 1rem; padding: .6rem 0; border-top: 1px solid var(--line); font-size: .9rem; }
+    .price-line strong { color: var(--navy); white-space: nowrap; }
+    .year-one { margin: 1rem -2rem -2rem; padding: 1.25rem 2rem; color: #fff; background: var(--navy); }
+    .year-one span { display: block; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; }
+    .year-one strong { display: block; margin-top: .2rem; font: 700 2rem/1 var(--display); }
+    .pricing-note { max-width: 58rem; margin: 2rem 0 0; padding-left: 1rem; border-left: 4px solid var(--magenta); color: var(--muted); }
+
+    .comparison { padding: 7rem 0; background: var(--paper); }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); box-shadow: var(--shadow); scrollbar-color: var(--magenta) var(--line); }
+    table { width: 100%; min-width: 850px; border-collapse: collapse; text-align: left; }
+    caption { padding: .75rem 1rem; color: var(--muted); background: var(--cream); font-size: .86rem; text-align: left; }
+    th, td { padding: .9rem 1rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    thead th { position: sticky; top: 0; color: #fff; background: var(--navy); font-size: .86rem; }
+    tbody th { width: 23%; color: var(--deep-navy); background: #fafbff; font-size: .88rem; }
+    tbody td { width: 25.66%; color: var(--muted); font-size: .88rem; }
+    tbody tr:hover td, tbody tr:hover th { background: #fffdf6; }
+
+    .catalogue { padding: 7rem 0; background: var(--deep-navy); color: #fff; }
+    .catalogue .section-lead { color: #cdd5ff; }
+    .catalogue-groups { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .catalogue-group { padding: 1.35rem; border-top: 3px solid var(--magenta); background: #fff; color: var(--ink); }
+    .catalogue-group h3 { min-height: 3rem; margin: 0 0 .8rem; font: 700 1.4rem/1.15 var(--display); }
+    .catalogue-row { padding: .9rem 0; border-top: 1px solid var(--line); }
+    .catalogue-main { display: flex; justify-content: space-between; gap: .8rem; align-items: baseline; }
+    .catalogue-main strong:first-child { font-size: .9rem; }
+    .catalogue-price { color: var(--navy); font-size: .83rem; text-align: right; white-space: nowrap; }
+    .catalogue-row p { margin: .25rem 0 0; color: var(--muted); font-size: .78rem; line-height: 1.45; }
+    .overage { margin-top: 4rem; }
+    .overage h3 { margin: 0 0 1rem; font: 700 2rem/1.1 var(--display); }
+    .overage-grid { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid rgba(255,255,255,.25); }
+    .overage-row { display: flex; justify-content: space-between; gap: 1rem; padding: .85rem 1rem .85rem 0; border-bottom: 1px solid rgba(255,255,255,.18); }
+    .overage-row:nth-child(odd) { margin-right: 1.5rem; }
+    .overage-row strong { color: var(--lime); font-size: .85rem; text-align: right; white-space: nowrap; }
+
+    .payment { padding: 7rem 0; background: var(--cream); }
+    .payment-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 4rem; }
+    .terms { margin: 2.5rem 0 0; padding: 0; list-style: none; counter-reset: term; }
+    .terms li { counter-increment: term; display: grid; grid-template-columns: 2.2rem 1fr; gap: .8rem; padding: 1rem 0; border-top: 1px solid var(--line); }
+    .terms li::before { content: counter(term, decimal-leading-zero); color: var(--magenta); font: 700 1rem var(--display); }
+    .terms strong { display: block; }
+    .terms span { display: block; color: var(--muted); font-size: .9rem; }
+    .scope-panel { align-self: start; position: sticky; top: 7rem; padding: 2rem; color: #fff; background: var(--navy); box-shadow: 14px 14px 0 var(--lime); }
+    .scope-panel h3 { margin: 0 0 1rem; font: 700 2rem/1.1 var(--display); }
+    .scope-list { margin: 0; padding-left: 1.15rem; }
+    .scope-list li { margin: .8rem 0; color: #e2e6ff; }
+
+    .final-cta { padding: 7rem 0; color: #fff; background: var(--magenta); }
+    .final-grid { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: end; }
+    .final-cta h2 { max-width: 800px; margin: 0; font: 700 clamp(2.5rem, 5vw, 5rem)/.95 var(--display); letter-spacing: -.04em; }
+    .final-cta p { max-width: 48rem; margin: 1rem 0 0; color: #fff1f8; }
+    footer { padding: 1.6rem 0; color: #cbd2ff; background: var(--deep-navy); font-size: .82rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 1rem; }
+
+    @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 960px) {
+      .site-nav { display: none; }
+      .language-switch { margin-left: auto; }
+      .hero-grid { grid-template-columns: 1.15fr .85fr; min-height: 580px; }
+      .pricing-grid, .catalogue-groups { grid-template-columns: 1fr; }
+      .tier:nth-child(2) { transform: none; }
+      .catalogue-group h3 { min-height: auto; }
+      .payment-grid { gap: 2rem; }
+    }
+
+    @media (max-width: 759px) {
+      html { scroll-padding-top: 5rem; }
+      .container { width: min(100% - 1.5rem, 44rem); }
+      .header-inner { min-height: 4.25rem; gap: .55rem; }
+      .brand img { width: 116px; }
+      .header-cta { width: 2.75rem; overflow: hidden; padding-inline: .75rem; color: transparent; }
+      .header-cta::after { content: "↗"; color: #fff; font-size: 1rem; }
+      .hero-grid { min-height: auto; grid-template-columns: 1fr; padding-top: 4rem; }
+      .hero-copy { padding-bottom: 0; }
+      .hero h1 { font-size: clamp(3.1rem, 15vw, 5.2rem); }
+      .aming-wrap { max-width: 360px; margin-inline: auto; }
+      .aming-wrap img { max-height: 440px; }
+      .journey, .pricing, .comparison, .catalogue, .payment, .final-cta { padding: 5rem 0; }
+      .journey-grid { grid-template-columns: 1fr; }
+      .step-number { margin-bottom: 1.3rem; }
+      .section-head, .payment-grid, .final-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+      .section-head .section-lead { margin-top: .4rem; }
+      .pricing-grid { gap: .8rem; }
+      .table-wrap { margin-right: -.75rem; border-right: 0; }
+      caption { position: sticky; left: 0; max-width: calc(100vw - 1.5rem); }
+      .catalogue-main { align-items: flex-start; }
+      .overage-grid { grid-template-columns: 1fr; }
+      .overage-row:nth-child(odd) { margin-right: 0; }
+      .scope-panel { position: static; margin: 1rem .8rem .8rem 0; }
+      .final-grid { align-items: start; }
+      .footer-inner { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#awal" data-i18n-aria="aria.home"><img src="jobseeker-logo_transparent.png" alt="Logo Jobseeker" data-i18n-alt="image.logo"></a>
+      <nav class="site-nav" data-i18n-aria="aria.nav">
+        <a href="#paket" data-i18n="nav.packages">Paket</a>
+        <a href="#fitur" data-i18n="nav.features">Fitur</a>
+        <a href="#tambahan" data-i18n="nav.addons">Tambahan</a>
+        <a href="#pembayaran" data-i18n="nav.payment">Pembayaran</a>
+      </nav>
+      <div class="language-switch" role="group" data-i18n-aria="aria.language">
+        <button type="button" data-language="id" data-i18n-aria="language.id" aria-pressed="true" aria-label="Gunakan Bahasa Indonesia">ID</button>
+        <button type="button" data-language="en" data-i18n-aria="language.en" aria-pressed="false" aria-label="Gunakan Bahasa Inggris">EN</button>
+      </div>
+      <a class="button button-primary header-cta" href="index.html" data-i18n="nav.calculator">Buka kalkulator</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="awal">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="hero.eyebrow">Panduan paket Jobseeker</p>
+          <h1 data-i18n="hero.title">Pilih. Sesuaikan. Tawarkan dengan percaya diri.</h1>
+          <p class="hero-text" data-i18n="hero.body">Temukan paket yang tepat, selaraskan ruang lingkup, lalu lanjutkan ke alat penawaran berbasis penggunaan untuk kebutuhan klien Anda.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="index.html" data-i18n="hero.calculator">Buka alat penawaran</a>
+            <a class="button button-secondary" href="#paket" data-i18n="hero.packages">Lihat tiga paket ↓</a>
+          </div>
+        </div>
+        <div class="aming-wrap">
+          <img src="aming-official-transparent.png" alt="Aming, pendamping panduan penjualan Jobseeker" data-i18n-alt="image.aming">
+          <p class="aming-note" data-i18n="hero.note">Mulai dari kebutuhan klien, bukan sekadar daftar fitur.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="journey" aria-labelledby="journey-title">
+      <div class="container">
+        <p class="eyebrow" data-i18n="journey.eyebrow">Alur percakapan</p>
+        <h2 class="section-title" id="journey-title" data-i18n="journey.title">Tiga langkah menuju penawaran yang jelas.</h2>
+        <div class="journey-grid">
+          <article class="step"><span class="step-number">01</span><h3 data-i18n="journey.one.title">Pilih paket</h3><p data-i18n="journey.one.body">Cocokkan skala operasi dan tingkat layanan dengan Essential, Growth, atau Enterprise.</p></article>
+          <article class="step"><span class="step-number">02</span><h3 data-i18n="journey.two.title">Sesuaikan ruang lingkup</h3><p data-i18n="journey.two.body">Tambahkan modul, otomasi, integrasi, atau layanan yang relevan.</p></article>
+          <article class="step"><span class="step-number">03</span><h3 data-i18n="journey.three.title">Susun penawaran</h3><p data-i18n="journey.three.body">Gunakan kalkulator terpisah untuk membangun penawaran berbasis penggunaan.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing" id="paket" aria-labelledby="pricing-title">
+      <div class="container">
+        <div class="section-head">
+          <div><p class="eyebrow" data-i18n="pricing.eyebrow">Panduan paket tetap</p><h2 class="section-title" id="pricing-title" data-i18n="pricing.title">Tiga titik awal, satu percakapan yang fleksibel.</h2></div>
+          <p class="section-lead" data-i18n="pricing.lead">Gunakan panduan tiga paket ini untuk orientasi awal. Harga berbasis penggunaan dihitung secara terpisah di alat penawaran.</p>
+        </div>
+        <div class="pricing-grid">
+          <article class="tier">
+            <span class="tier-badge" data-i18n="tier.essential.badge">Fondasi</span><h3>Essential</h3><p class="tier-fit" data-i18n="tier.essential.fit">Untuk tim yang membangun fondasi rekrutmen digital.</p>
+            <div class="price-line"><span data-i18n="price.platform">Platform / tahun</span><strong>Rp110 juta</strong></div><div class="price-line"><span data-i18n="price.setup">Setup / implementasi</span><strong>Rp25 juta</strong></div><div class="price-line"><span data-i18n="price.renewal">Perpanjangan</span><strong>Rp110 juta</strong></div>
+            <div class="year-one"><span data-i18n="price.yearone">Total Tahun 1</span><strong>Rp135 juta</strong></div>
+          </article>
+          <article class="tier">
+            <span class="tier-badge" data-i18n="tier.growth.badge">Pilihan populer</span><h3>Growth</h3><p class="tier-fit" data-i18n="tier.growth.fit">Untuk operasi yang berkembang dengan kebutuhan konfigurasi lebih luas.</p>
+            <div class="price-line"><span data-i18n="price.platform">Platform / tahun</span><strong>Rp175 juta</strong></div><div class="price-line"><span data-i18n="price.setup">Setup / implementasi</span><strong>Rp50 juta</strong></div><div class="price-line"><span data-i18n="price.renewal">Perpanjangan</span><strong>Rp175 juta</strong></div>
+            <div class="year-one"><span data-i18n="price.yearone">Total Tahun 1</span><strong>Rp225 juta</strong></div>
+          </article>
+          <article class="tier">
+            <span class="tier-badge" data-i18n="tier.enterprise.badge">Skala besar</span><h3>Enterprise</h3><p class="tier-fit" data-i18n="tier.enterprise.fit">Untuk organisasi kompleks dengan volume dan tata kelola lebih tinggi.</p>
+            <div class="price-line"><span data-i18n="price.platform">Platform / tahun</span><strong>Rp350 juta</strong></div><div class="price-line"><span data-i18n="price.setup">Setup / implementasi</span><strong>Rp100 juta</strong></div><div class="price-line"><span data-i18n="price.renewal">Perpanjangan</span><strong>Rp350 juta</strong></div>
+            <div class="year-one"><span data-i18n="price.yearone">Total Tahun 1</span><strong>Rp450 juta</strong></div>
+          </article>
+        </div>
+        <p class="pricing-note" data-i18n="pricing.note">Tahun 1 menggabungkan platform dan setup/implementasi. Perpanjangan tidak mencakup setup, kecuali ada ruang lingkup baru, integrasi besar, migrasi, atau implementasi ulang.</p>
+      </div>
+    </section>
+
+    <section class="comparison" id="fitur" aria-labelledby="comparison-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow" data-i18n="comparison.eyebrow">Perbandingan rinci</p><h2 class="section-title" id="comparison-title" data-i18n="comparison.title">Lihat perbedaannya sekilas.</h2></div><p class="section-lead" data-i18n="comparison.lead">Geser tabel ke samping pada layar kecil untuk membandingkan setiap paket.</p></div>
+        <div class="table-wrap" role="region" tabindex="0" data-i18n-aria="aria.comparison">
+          <table>
+            <caption data-i18n="comparison.caption">Perbandingan komponen untuk Essential, Growth, dan Enterprise</caption>
+            <thead><tr><th scope="col" data-i18n="table.component">Komponen</th><th scope="col">Essential</th><th scope="col">Growth</th><th scope="col">Enterprise</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">ATS</th><td data-i18n="value.included">Termasuk</td><td data-i18n="value.included">Termasuk</td><td data-i18n="value.included">Termasuk</td></tr>
+              <tr><th scope="row">HRIS</th><td data-i18n="value.basicLimited">Dasar / terbatas</td><td data-i18n="value.included">Termasuk</td><td data-i18n="value.included">Termasuk</td></tr>
+              <tr><th scope="row" data-i18n="row.careersite">Situs karier</th><td data-i18n="value.standard">Standar</td><td data-i18n="value.standardConfig">Standar + konfigurasi</td><td data-i18n="value.enterpriseConfig">Konfigurasi enterprise</td></tr>
+              <tr><th scope="row" data-i18n="row.dashboard">Dasbor</th><td data-i18n="value.basic">Dasar</td><td data-i18n="value.standard">Standar</td><td data-i18n="value.enterpriseDashboard">Dasbor enterprise</td></tr>
+              <tr><th scope="row" data-i18n="row.ai">Penyaringan AI</th><td data-i18n="value.limitedQuota">Kuota terbatas</td><td data-i18n="value.standardQuota">Kuota standar</td><td data-i18n="value.higherQuota">Kuota lebih tinggi</td></tr>
+              <tr><th scope="row" data-i18n="row.workflow">Alur WhatsApp / email</th><td data-i18n="value.basic">Dasar</td><td data-i18n="value.priorityWorkflow">Alur prioritas</td><td data-i18n="value.advancedWorkflow">Alur lanjutan</td></tr>
+              <tr><th scope="row" data-i18n="row.admins">Pengguna admin</th><td data-i18n="value.up3">Hingga 3</td><td data-i18n="value.up10">Hingga 10</td><td data-i18n="value.up50">Hingga 50</td></tr>
+              <tr><th scope="row" data-i18n="row.branches">Cabang / lokasi</th><td data-i18n="value.up3">Hingga 3</td><td data-i18n="value.up10">Hingga 10</td><td data-i18n="value.up100">Hingga 100</td></tr>
+              <tr><th scope="row" data-i18n="row.candidates">Pemrosesan kandidat</th><td data-i18n="value.c1500">Hingga 1.500/bulan</td><td data-i18n="value.c5000">Hingga 5.000/bulan</td><td data-i18n="value.c20000">Hingga 20.000/bulan</td></tr>
+              <tr><th scope="row" data-i18n="row.mandays">Manday konfigurasi</th><td data-i18n="value.noneMinimal">Tidak ada / minimal</td><td data-i18n="value.m5">5 manday</td><td data-i18n="value.m10">10 manday</td></tr>
+              <tr><th scope="row" data-i18n="row.support">Dukungan</th><td data-i18n="value.ticket">Tiket/email</td><td data-i18n="value.waPriority">Prioritas WhatsApp, jam kerja</td><td data-i18n="value.dedicated">AM khusus, SLA jam kerja</td></tr>
+              <tr><th scope="row" data-i18n="row.review">Pertemuan tinjauan</th><td data-i18n="value.quarterly">Triwulanan</td><td data-i18n="value.monthly">Bulanan</td><td data-i18n="value.executive">Tinjauan eksekutif triwulanan</td></tr>
+              <tr><th scope="row" data-i18n="row.integration">Integrasi</th><td data-i18n="value.notIncluded">Tidak termasuk</td><td data-i18n="value.addon">Tambahan</td><td data-i18n="value.standardSupport">Dukungan standar; integrasi lebih dalam sebagai tambahan</td></tr>
+              <tr><th scope="row" data-i18n="row.onprem">On-premise</th><td data-i18n="value.unavailable">Tidak tersedia</td><td data-i18n="value.unavailable">Tidak tersedia</td><td data-i18n="value.customQuote">Penawaran khusus</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="catalogue" id="tambahan" aria-labelledby="catalogue-title">
+      <div class="container">
+        <div class="section-head"><div><p class="eyebrow" data-i18n="catalogue.eyebrow">Katalog tambahan</p><h2 class="section-title" id="catalogue-title" data-i18n="catalogue.title">Tambahkan yang memang dibutuhkan.</h2></div><p class="section-lead" data-i18n="catalogue.lead">Modul produk, otomasi, analitik, dan layanan dapat dipadukan sesuai ruang lingkup klien.</p></div>
+        <div class="catalogue-groups">
+          <article class="catalogue-group"><h3 data-i18n="group.products">Modul Produk</h3>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.hris.name">Upgrade HRIS lengkap</strong><strong class="catalogue-price" data-i18n="price.hris">Rp35 jt / tahun</strong></div><p data-i18n="addon.hris.note">Untuk klien Essential yang meningkatkan dari HRIS-lite.</p></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong>PMS</strong><strong class="catalogue-price" data-i18n="price.module">Rp30 jt / tahun</strong></div><p data-i18n="addon.module.note">Modul produk.</p></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong>LMS</strong><strong class="catalogue-price" data-i18n="price.module">Rp30 jt / tahun</strong></div><p data-i18n="addon.module.note">Modul produk.</p></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.attendance.name">Kehadiran</strong><strong class="catalogue-price" data-i18n="price.module">Rp30 jt / tahun</strong></div><p data-i18n="addon.module.note">Modul produk.</p></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.payroll.name">Payroll</strong><strong class="catalogue-price" data-i18n="price.payroll">Rp45 jt / tahun</strong></div><p data-i18n="addon.payroll.note">Dukungan payroll yang diperluas.</p></div>
+          </article>
+          <article class="catalogue-group"><h3 data-i18n="group.automation">Otomasi &amp; Analitik</h3>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.analytics.name">Analitik lanjutan</strong><strong class="catalogue-price" data-i18n="price.analytics">Rp50 jt / tahun</strong></div><p data-i18n="addon.analytics.note">Pelaporan untuk pimpinan.</p></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.wa.name">Otomasi WhatsApp</strong><strong class="catalogue-price" data-i18n="price.automation">Rp35 jt / tahun + penggunaan</strong></div><p data-i18n="addon.usage.note">Penggunaan ditagihkan terpisah.</p></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.ai.name">Otomasi penyaringan AI</strong><strong class="catalogue-price" data-i18n="price.automation">Rp35 jt / tahun + penggunaan</strong></div><p data-i18n="addon.usage.note">Penggunaan ditagihkan terpisah.</p></div>
+          </article>
+          <article class="catalogue-group"><h3 data-i18n="group.services">Layanan &amp; Integrasi</h3>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.am.name">AM khusus</strong><strong class="catalogue-price" data-i18n="price.am">Rp60 jt / tahun</strong></div></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.sla.name">SLA prioritas</strong><strong class="catalogue-price" data-i18n="price.sla">Rp75 jt / tahun</strong></div></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.migration.name">Migrasi data</strong><strong class="catalogue-price" data-i18n="price.migration">mulai Rp25 jt / proyek</strong></div><p data-i18n="addon.scope.note">Sesuai ruang lingkup.</p></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.api.name">API / integrasi</strong><strong class="catalogue-price" data-i18n="price.api">mulai Rp50 jt / proyek</strong></div><p data-i18n="addon.scope.note">Sesuai ruang lingkup.</p></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.custom.name">Pengembangan khusus</strong><strong class="catalogue-price" data-i18n="price.custom">Rp5 jt / manday</strong></div><p data-i18n="addon.custom.note">Minimum 2 manday.</p></div>
+            <div class="catalogue-row"><div class="catalogue-main"><strong data-i18n="addon.onprem.name">Penerapan on-premise</strong><strong class="catalogue-price" data-i18n="price.onprem">khusus, mulai Rp1B Y1</strong></div></div>
+          </article>
+        </div>
+        <div class="overage"><h3 data-i18n="overage.title">Penggunaan di atas kuota</h3><div class="overage-grid">
+          <div class="overage-row"><span data-i18n="overage.processed">Kandidat diproses tambahan</span><strong data-i18n="price.extraProcessed">Rp2 jt / ekstra 1.000 kandidat</strong></div>
+          <div class="overage-row"><span data-i18n="overage.ai">Kandidat disaring AI tambahan</span><strong data-i18n="price.extraAi">Rp3 jt / ekstra 1.000 kandidat</strong></div>
+          <div class="overage-row"><span data-i18n="overage.messaging">Penggunaan WhatsApp / SendGrid tambahan</span><strong data-i18n="overage.actual">biaya aktual + 30%</strong></div>
+          <div class="overage-row"><span data-i18n="overage.admin">Pengguna admin tambahan</span><strong data-i18n="price.extraAdmin">Rp2 jt / pengguna / tahun</strong></div>
+          <div class="overage-row"><span data-i18n="overage.branch">Cabang / lokasi tambahan</span><strong data-i18n="price.extraBranch">Rp1 jt / lokasi / tahun</strong></div>
+          <div class="overage-row"><span data-i18n="overage.storage">Penyimpanan / retensi data tambahan</span><strong data-i18n="value.customQuote">Penawaran khusus</strong></div>
+          <div class="overage-row"><span data-i18n="overage.dashboard">Dasbor / laporan khusus</span><strong data-i18n="price.migration">mulai Rp25 jt / proyek</strong></div>
+        </div></div>
+      </div>
+    </section>
+
+    <section class="payment" id="pembayaran" aria-labelledby="payment-title">
+      <div class="container payment-grid">
+        <div><p class="eyebrow" data-i18n="payment.eyebrow">Pilihan pembayaran</p><h2 class="section-title" id="payment-title" data-i18n="payment.title">Struktur yang transparan untuk percakapan yang lancar.</h2>
+          <ol class="terms">
+            <li><div><strong data-i18n="term.annual.name">Tahunan di muka</strong><span data-i18n="term.annual.note">Diutamakan; tanpa diskon tunai.</span></div></li>
+            <li><div><strong data-i18n="term.quarterly.name">Triwulanan</strong><span data-i18n="term.quarterly.note">Tambahan 5% biaya platform.</span></div></li>
+            <li><div><strong data-i18n="term.monthly.name">Bulanan</strong><span data-i18n="term.monthly.note">Tambahan 12% biaya platform; hanya Essential/Growth.</span></div></li>
+            <li><div><strong>Net-30</strong><span data-i18n="term.net30.note">Tambahan 1% biaya pembiayaan.</span></div></li>
+            <li><div><strong>Net-60</strong><span data-i18n="term.net60.note">Tambahan 2% biaya pembiayaan.</span></div></li>
+            <li><div><strong data-i18n="term.card.name">Kartu kredit/MDR</strong><span data-i18n="term.card.note">MDR ditanggung klien.</span></div></li>
+            <li><div><strong data-i18n="term.leasing.name">Leasing/pembiayaan pihak ketiga</strong><span data-i18n="term.leasing.note">Nilai di-gross-up agar Jobseeker menerima jumlah neto yang disepakati.</span></div></li>
+            <li><div><strong>PPh 23</strong><span data-i18n="term.pph.note">Faktur di-gross-up dengan membagi nilai dengan 0,98.</span></div></li>
+            <li><div><strong data-i18n="term.setup.name">Setup/implementasi</strong><span data-i18n="term.setup.note">Bagian dari Tahun 1 dan ditawarkan kembali hanya untuk ruang lingkup baru yang relevan.</span></div></li>
+          </ol>
+        </div>
+        <aside class="scope-panel" aria-labelledby="scope-title"><p class="eyebrow" data-i18n="scope.eyebrow">Panduan ruang lingkup</p><h3 id="scope-title" data-i18n="scope.title">Tetap jelas sejak awal.</h3><ul class="scope-list">
+          <li data-i18n="scope.dashboard">Dasbor khusus disusun sebagai proyek terpisah.</li><li data-i18n="scope.integration">Integrasi ditetapkan ruang lingkupnya secara terpisah.</li><li data-i18n="scope.volume">Volume di atas kuota menggunakan harga overage.</li><li data-i18n="scope.service">Tingkat layanan khusus tersedia melalui paket atau tambahan yang sesuai.</li>
+        </ul></aside>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="final-title"><div class="container final-grid"><div><p class="eyebrow" data-i18n="final.eyebrow">Langkah berikutnya</p><h2 id="final-title" data-i18n="final.title">Siap menyusun penawaran berdasarkan penggunaan?</h2><p data-i18n="final.body">Buka kalkulator sebagai alat penawaran terpisah untuk menyesuaikan penggunaan dan kebutuhan klien.</p></div><a class="button button-light" href="index.html" data-i18n="final.button">Buka kalkulator →</a></div></section>
+  </main>
+
+  <footer><div class="container footer-inner"><span data-i18n="footer.copy">© 2026 Jobseeker. Panduan paket untuk percakapan klien.</span><a href="#awal" data-i18n="footer.top">Kembali ke atas ↑</a></div></footer>
+
+  <script>
+    const translations = {
+      id: {
+        "aria.home": "Kembali ke awal panduan Jobseeker", "aria.nav": "Navigasi panduan", "aria.language": "Pilih bahasa", "aria.comparison": "Tabel perbandingan paket; geser secara horizontal pada layar kecil", "image.logo": "Logo Jobseeker", "image.aming": "Aming, pendamping panduan penjualan Jobseeker", "language.id": "Gunakan Bahasa Indonesia", "language.en": "Gunakan Bahasa Inggris",
+        "nav.packages": "Paket", "nav.features": "Fitur", "nav.addons": "Tambahan", "nav.payment": "Pembayaran", "nav.calculator": "Buka kalkulator",
+        "hero.eyebrow": "Panduan paket Jobseeker", "hero.title": "Pilih. Sesuaikan. Tawarkan dengan percaya diri.", "hero.body": "Temukan paket yang tepat, selaraskan ruang lingkup, lalu lanjutkan ke alat penawaran berbasis penggunaan untuk kebutuhan klien Anda.", "hero.calculator": "Buka alat penawaran", "hero.packages": "Lihat tiga paket ↓", "hero.note": "Mulai dari kebutuhan klien, bukan sekadar daftar fitur.",
+        "journey.eyebrow": "Alur percakapan", "journey.title": "Tiga langkah menuju penawaran yang jelas.", "journey.one.title": "Pilih paket", "journey.one.body": "Cocokkan skala operasi dan tingkat layanan dengan Essential, Growth, atau Enterprise.", "journey.two.title": "Sesuaikan ruang lingkup", "journey.two.body": "Tambahkan modul, otomasi, integrasi, atau layanan yang relevan.", "journey.three.title": "Susun penawaran", "journey.three.body": "Gunakan kalkulator terpisah untuk membangun penawaran berbasis penggunaan.",
+        "pricing.eyebrow": "Panduan paket tetap", "pricing.title": "Tiga titik awal, satu percakapan yang fleksibel.", "pricing.lead": "Gunakan panduan tiga paket ini untuk orientasi awal. Harga berbasis penggunaan dihitung secara terpisah di alat penawaran.", "pricing.note": "Tahun 1 menggabungkan platform dan setup/implementasi. Perpanjangan tidak mencakup setup, kecuali ada ruang lingkup baru, integrasi besar, migrasi, atau implementasi ulang.",
+        "tier.essential.badge": "Fondasi", "tier.essential.fit": "Untuk tim yang membangun fondasi rekrutmen digital.", "tier.growth.badge": "Pilihan populer", "tier.growth.fit": "Untuk operasi yang berkembang dengan kebutuhan konfigurasi lebih luas.", "tier.enterprise.badge": "Skala besar", "tier.enterprise.fit": "Untuk organisasi kompleks dengan volume dan tata kelola lebih tinggi.",
+        "price.platform": "Platform / tahun", "price.setup": "Setup / implementasi", "price.renewal": "Perpanjangan", "price.yearone": "Total Tahun 1", "price.hris": "Rp35 jt / tahun", "price.module": "Rp30 jt / tahun", "price.payroll": "Rp45 jt / tahun", "price.analytics": "Rp50 jt / tahun", "price.automation": "Rp35 jt / tahun + penggunaan", "price.am": "Rp60 jt / tahun", "price.sla": "Rp75 jt / tahun", "price.migration": "mulai Rp25 jt / proyek", "price.api": "mulai Rp50 jt / proyek", "price.custom": "Rp5 jt / manday", "price.onprem": "khusus, mulai Rp1B Y1", "price.extraProcessed": "Rp2 jt / ekstra 1.000 kandidat", "price.extraAi": "Rp3 jt / ekstra 1.000 kandidat", "price.extraAdmin": "Rp2 jt / pengguna / tahun", "price.extraBranch": "Rp1 jt / lokasi / tahun",
+        "comparison.eyebrow": "Perbandingan rinci", "comparison.title": "Lihat perbedaannya sekilas.", "comparison.lead": "Geser tabel ke samping pada layar kecil untuk membandingkan setiap paket.", "comparison.caption": "Perbandingan komponen untuk Essential, Growth, dan Enterprise", "table.component": "Komponen",
+        "row.careersite": "Situs karier", "row.dashboard": "Dasbor", "row.ai": "Penyaringan AI", "row.workflow": "Alur WhatsApp / email", "row.admins": "Pengguna admin", "row.branches": "Cabang / lokasi", "row.candidates": "Pemrosesan kandidat", "row.mandays": "Manday konfigurasi", "row.support": "Dukungan", "row.review": "Pertemuan tinjauan", "row.integration": "Integrasi", "row.onprem": "On-premise",
+        "value.included": "Termasuk", "value.basicLimited": "Dasar / terbatas", "value.standard": "Standar", "value.standardConfig": "Standar + konfigurasi", "value.enterpriseConfig": "Konfigurasi enterprise", "value.basic": "Dasar", "value.enterpriseDashboard": "Dasbor enterprise", "value.limitedQuota": "Kuota terbatas", "value.standardQuota": "Kuota standar", "value.higherQuota": "Kuota lebih tinggi", "value.priorityWorkflow": "Alur prioritas", "value.advancedWorkflow": "Alur lanjutan", "value.up3": "Hingga 3", "value.up10": "Hingga 10", "value.up50": "Hingga 50", "value.up100": "Hingga 100", "value.c1500": "Hingga 1.500/bulan", "value.c5000": "Hingga 5.000/bulan", "value.c20000": "Hingga 20.000/bulan", "value.noneMinimal": "Tidak ada / minimal", "value.m5": "5 manday", "value.m10": "10 manday", "value.ticket": "Tiket/email", "value.waPriority": "Prioritas WhatsApp, jam kerja", "value.dedicated": "AM khusus, SLA jam kerja", "value.quarterly": "Triwulanan", "value.monthly": "Bulanan", "value.executive": "Tinjauan eksekutif triwulanan", "value.notIncluded": "Tidak termasuk", "value.addon": "Tambahan", "value.standardSupport": "Dukungan standar; integrasi lebih dalam sebagai tambahan", "value.unavailable": "Tidak tersedia", "value.customQuote": "Penawaran khusus",
+        "catalogue.eyebrow": "Katalog tambahan", "catalogue.title": "Tambahkan yang memang dibutuhkan.", "catalogue.lead": "Modul produk, otomasi, analitik, dan layanan dapat dipadukan sesuai ruang lingkup klien.", "group.products": "Modul Produk", "group.automation": "Otomasi & Analitik", "group.services": "Layanan & Integrasi",
+        "addon.hris.name": "Upgrade HRIS lengkap", "addon.hris.note": "Untuk klien Essential yang meningkatkan dari HRIS-lite.", "addon.module.note": "Modul produk.", "addon.attendance.name": "Kehadiran", "addon.payroll.name": "Payroll", "addon.payroll.note": "Dukungan payroll yang diperluas.", "addon.analytics.name": "Analitik lanjutan", "addon.analytics.note": "Pelaporan untuk pimpinan.", "addon.wa.name": "Otomasi WhatsApp", "addon.ai.name": "Otomasi penyaringan AI", "addon.usage.note": "Penggunaan ditagihkan terpisah.", "addon.am.name": "AM khusus", "addon.sla.name": "SLA prioritas", "addon.migration.name": "Migrasi data", "addon.scope.note": "Sesuai ruang lingkup.", "addon.api.name": "API / integrasi", "addon.custom.name": "Pengembangan khusus", "addon.custom.note": "Minimum 2 manday.", "addon.onprem.name": "Penerapan on-premise",
+        "overage.title": "Penggunaan di atas kuota", "overage.processed": "Kandidat diproses tambahan", "overage.ai": "Kandidat disaring AI tambahan", "overage.messaging": "Penggunaan WhatsApp / SendGrid tambahan", "overage.actual": "biaya aktual + 30%", "overage.admin": "Pengguna admin tambahan", "overage.branch": "Cabang / lokasi tambahan", "overage.storage": "Penyimpanan / retensi data tambahan", "overage.dashboard": "Dasbor / laporan khusus",
+        "payment.eyebrow": "Pilihan pembayaran", "payment.title": "Struktur yang transparan untuk percakapan yang lancar.", "term.annual.name": "Tahunan di muka", "term.annual.note": "Diutamakan; tanpa diskon tunai.", "term.quarterly.name": "Triwulanan", "term.quarterly.note": "Tambahan 5% biaya platform.", "term.monthly.name": "Bulanan", "term.monthly.note": "Tambahan 12% biaya platform; hanya Essential/Growth.", "term.net30.note": "Tambahan 1% biaya pembiayaan.", "term.net60.note": "Tambahan 2% biaya pembiayaan.", "term.card.name": "Kartu kredit/MDR", "term.card.note": "MDR ditanggung klien.", "term.leasing.name": "Leasing/pembiayaan pihak ketiga", "term.leasing.note": "Nilai di-gross-up agar Jobseeker menerima jumlah neto yang disepakati.", "term.pph.note": "Faktur di-gross-up dengan membagi nilai dengan 0,98.", "term.setup.name": "Setup/implementasi", "term.setup.note": "Bagian dari Tahun 1 dan ditawarkan kembali hanya untuk ruang lingkup baru yang relevan.",
+        "scope.eyebrow": "Panduan ruang lingkup", "scope.title": "Tetap jelas sejak awal.", "scope.dashboard": "Dasbor khusus disusun sebagai proyek terpisah.", "scope.integration": "Integrasi ditetapkan ruang lingkupnya secara terpisah.", "scope.volume": "Volume di atas kuota menggunakan harga overage.", "scope.service": "Tingkat layanan khusus tersedia melalui paket atau tambahan yang sesuai.",
+        "final.eyebrow": "Langkah berikutnya", "final.title": "Siap menyusun penawaran berdasarkan penggunaan?", "final.body": "Buka kalkulator sebagai alat penawaran terpisah untuk menyesuaikan penggunaan dan kebutuhan klien.", "final.button": "Buka kalkulator →", "footer.copy": "© 2026 Jobseeker. Panduan paket untuk percakapan klien.", "footer.top": "Kembali ke atas ↑"
+      },
+      en: {
+        "aria.home": "Return to the start of the Jobseeker guide", "aria.nav": "Guide navigation", "aria.language": "Choose language", "aria.comparison": "Tier comparison table; scroll horizontally on small screens", "image.logo": "Jobseeker logo", "image.aming": "Aming, Jobseeker sales guide companion", "language.id": "Use Indonesian", "language.en": "Use English",
+        "nav.packages": "Packages", "nav.features": "Features", "nav.addons": "Add-ons", "nav.payment": "Payment", "nav.calculator": "Open calculator",
+        "hero.eyebrow": "Jobseeker package guide", "hero.title": "Choose. Tailor. Offer with confidence.", "hero.body": "Find the right package, align the scope, then continue to the usage-based quote tool for your client’s needs.", "hero.calculator": "Open quote tool", "hero.packages": "See three packages ↓", "hero.note": "Start with the client’s needs, not just a feature list.",
+        "journey.eyebrow": "Conversation flow", "journey.title": "Three steps to a clear proposal.", "journey.one.title": "Choose a tier", "journey.one.body": "Match operating scale and service level with Essential, Growth, or Enterprise.", "journey.two.title": "Adjust the scope", "journey.two.body": "Add relevant modules, automation, integrations, or services.", "journey.three.title": "Build the quote", "journey.three.body": "Use the separate calculator to build a usage-based quote.",
+        "pricing.eyebrow": "Fixed three-tier guide", "pricing.title": "Three starting points, one flexible conversation.", "pricing.lead": "Use this three-tier guide for initial orientation. Usage-based pricing is calculated separately in the quote tool.", "pricing.note": "Year 1 combines platform and setup/implementation. Renewal removes setup unless there is new scope, a major integration, migration, or reimplementation.",
+        "tier.essential.badge": "Foundation", "tier.essential.fit": "For teams building their digital recruitment foundation.", "tier.growth.badge": "Popular choice", "tier.growth.fit": "For growing operations with broader configuration needs.", "tier.enterprise.badge": "Large scale", "tier.enterprise.fit": "For complex organizations with higher volume and governance needs.",
+        "price.platform": "Platform / year", "price.setup": "Setup / implementation", "price.renewal": "Renewal", "price.yearone": "Year 1 total", "price.hris": "Rp35 jt / year", "price.module": "Rp30 jt / year", "price.payroll": "Rp45 jt / year", "price.analytics": "Rp50 jt / year", "price.automation": "Rp35 jt / year + usage", "price.am": "Rp60 jt / year", "price.sla": "Rp75 jt / year", "price.migration": "from Rp25 jt / project", "price.api": "from Rp50 jt / project", "price.custom": "Rp5 jt / manday", "price.onprem": "custom, from Rp1B Y1", "price.extraProcessed": "Rp2 jt / extra 1,000 candidates", "price.extraAi": "Rp3 jt / extra 1,000 candidates", "price.extraAdmin": "Rp2 jt / user / year", "price.extraBranch": "Rp1 jt / location / year",
+        "comparison.eyebrow": "Detailed comparison", "comparison.title": "See the differences at a glance.", "comparison.lead": "Scroll the table sideways on smaller screens to compare each tier.", "comparison.caption": "Component comparison for Essential, Growth, and Enterprise", "table.component": "Component",
+        "row.careersite": "Careersite", "row.dashboard": "Dashboard", "row.ai": "AI screening", "row.workflow": "WhatsApp / email workflow", "row.admins": "Admin users", "row.branches": "Branches / locations", "row.candidates": "Candidate processing", "row.mandays": "Configuration mandays", "row.support": "Support", "row.review": "Review meeting", "row.integration": "Integration", "row.onprem": "On-premise",
+        "value.included": "Included", "value.basicLimited": "Basic / limited", "value.standard": "Standard", "value.standardConfig": "Standard + configuration", "value.enterpriseConfig": "Enterprise configuration", "value.basic": "Basic", "value.enterpriseDashboard": "Enterprise dashboard", "value.limitedQuota": "Limited quota", "value.standardQuota": "Standard quota", "value.higherQuota": "Higher quota", "value.priorityWorkflow": "Priority workflow", "value.advancedWorkflow": "Advanced workflow", "value.up3": "Up to 3", "value.up10": "Up to 10", "value.up50": "Up to 50", "value.up100": "Up to 100", "value.c1500": "Up to 1,500/month", "value.c5000": "Up to 5,000/month", "value.c20000": "Up to 20,000/month", "value.noneMinimal": "None / minimal", "value.m5": "5 mandays", "value.m10": "10 mandays", "value.ticket": "Ticket/email", "value.waPriority": "WhatsApp priority, working hours", "value.dedicated": "Dedicated AM, working-hours SLA", "value.quarterly": "Quarterly", "value.monthly": "Monthly", "value.executive": "Quarterly executive review", "value.notIncluded": "Not included", "value.addon": "Add-on", "value.standardSupport": "Standard support; deeper integration add-on", "value.unavailable": "Not available", "value.customQuote": "Custom quote",
+        "catalogue.eyebrow": "Add-on catalogue", "catalogue.title": "Add only what is needed.", "catalogue.lead": "Product modules, automation, analytics, and services can be combined to fit the client scope.", "group.products": "Product Modules", "group.automation": "Automation & Analytics", "group.services": "Services & Integrations",
+        "addon.hris.name": "Full HRIS upgrade", "addon.hris.note": "For Essential clients upgrading from HRIS-lite.", "addon.module.note": "Product module.", "addon.attendance.name": "Attendance", "addon.payroll.name": "Payroll", "addon.payroll.note": "Expanded payroll support.", "addon.analytics.name": "Advanced analytics", "addon.analytics.note": "Leadership reporting.", "addon.wa.name": "WhatsApp automation", "addon.ai.name": "AI screening automation", "addon.usage.note": "Usage billed separately.", "addon.am.name": "Dedicated AM", "addon.sla.name": "Priority SLA", "addon.migration.name": "Data migration", "addon.scope.note": "Scope-based.", "addon.api.name": "API / integration", "addon.custom.name": "Custom development", "addon.custom.note": "Minimum 2 mandays.", "addon.onprem.name": "On-premise deployment",
+        "overage.title": "Usage above quota", "overage.processed": "Extra processed candidates", "overage.ai": "Extra AI-screened candidates", "overage.messaging": "Extra WhatsApp / SendGrid usage", "overage.actual": "actual cost + 30%", "overage.admin": "Extra admin user", "overage.branch": "Extra branch / location", "overage.storage": "Extra storage / data retention", "overage.dashboard": "Custom dashboard / report",
+        "payment.eyebrow": "Payment options", "payment.title": "A transparent structure for a smooth conversation.", "term.annual.name": "Annual upfront", "term.annual.note": "Preferred; no cash discount.", "term.quarterly.name": "Quarterly", "term.quarterly.note": "+5% platform fee.", "term.monthly.name": "Monthly", "term.monthly.note": "+12% platform fee; Essential/Growth only.", "term.net30.note": "+1% financing surcharge.", "term.net60.note": "+2% financing surcharge.", "term.card.name": "Credit card/MDR", "term.card.note": "Client bears MDR.", "term.leasing.name": "Leasing/third-party financing", "term.leasing.note": "Gross-up so Jobseeker receives the agreed net amount.", "term.pph.note": "Invoice grossed up by dividing by 0.98.", "term.setup.name": "Setup/implementation", "term.setup.note": "Part of Year 1 and quoted again only for relevant new scope.",
+        "scope.eyebrow": "Scope guidance", "scope.title": "Keep it clear from the start.", "scope.dashboard": "Custom dashboards are separate projects.", "scope.integration": "Integrations are scoped separately.", "scope.volume": "Volume beyond quotas uses overage pricing.", "scope.service": "Dedicated service levels require the appropriate tier or add-on.",
+        "final.eyebrow": "Next step", "final.title": "Ready to build a usage-based quote?", "final.body": "Open the calculator as a separate quote tool to tailor usage and client needs.", "final.button": "Open calculator →", "footer.copy": "© 2026 Jobseeker. Package guidance for client conversations.", "footer.top": "Back to top ↑"
+      }
+    };
+
+    const DEFAULT_LANGUAGE = "id";
+
+    function setLanguage(language) {
+      const selected = translations[language] ? language : DEFAULT_LANGUAGE;
+      document.documentElement.lang = selected;
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const value = translations[selected][element.dataset.i18n];
+        if (typeof value === "string") element.textContent = value;
+      });
+      document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
+        const value = translations[selected][element.dataset.i18nAlt];
+        if (typeof value === "string") element.setAttribute("alt", value);
+      });
+      document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
+        const value = translations[selected][element.dataset.i18nAria];
+        if (typeof value === "string") element.setAttribute("aria-label", value);
+      });
+      document.querySelectorAll("[data-language]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.language === selected));
+      });
+    }
+
+    document.querySelectorAll("[data-language]").forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.language));
+    });
+
+    setLanguage(DEFAULT_LANGUAGE);
+  </script>
+</body>
+</html>
