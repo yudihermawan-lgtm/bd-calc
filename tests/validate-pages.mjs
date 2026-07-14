@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 import path from "node:path";
+import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 
 const testsDir = path.dirname(fileURLToPath(import.meta.url));
@@ -9,6 +10,37 @@ const read = (name) => fs.readFile(path.join(root, name), "utf8");
 
 const index = await read("index.html");
 const guide = await read("sales-guide.html");
+
+assert.match(index, /Employee commitments keep the quote aligned with the client(?:'|’|&rsquo;)s expected workforce usage\./);
+assert.match(index, /Annual hiring commitments keep the quote aligned with the client(?:'|’|&rsquo;)s expected recruitment usage\./);
+assert.doesNotMatch(index, /No unlimited usage|We count the real one ourselves/i);
+
+for (const [name, html] of [["index.html", index], ["sales-guide.html", guide]]) {
+  assert.doesNotMatch(html, /https?:\/\//i, `${name} must not request external HTTP(S) resources`);
+}
+
+const usedTranslationKeys = new Set(
+  [...guide.matchAll(/\bdata-i18n(?:-alt|-aria)?=(["'])(.*?)\1/g)].map((match) => match[2]),
+);
+const translationsStart = guide.indexOf("const translations =") + "const translations =".length;
+const translationsEnd = guide.indexOf("const DEFAULT_LANGUAGE", translationsStart);
+assert.ok(translationsStart >= "const translations =".length && translationsEnd > translationsStart, "Translations object not found");
+const translationsSource = guide.slice(translationsStart, translationsEnd).trim().replace(/;$/, "");
+const translationContext = vm.createContext(Object.create(null), { codeGeneration: { strings: false, wasm: false } });
+const translations = vm.runInContext(`(${translationsSource})`, translationContext, { timeout: 1000 });
+
+for (const language of ["id", "en"]) {
+  assert.ok(translations[language] && typeof translations[language] === "object", `Missing ${language} dictionary`);
+  const dictionaryKeys = new Set(Object.keys(translations[language]));
+  for (const key of usedTranslationKeys) {
+    assert.equal(typeof translations[language][key], "string", `Missing or non-string ${language} translation: ${key}`);
+  }
+  assert.deepEqual(
+    [...dictionaryKeys].sort(),
+    [...usedTranslationKeys].sort(),
+    `${language} dictionary must contain every used key and no unused keys`,
+  );
+}
 
 assert.match(index, /href="sales-guide\.html"/);
 assert.match(guide, /href="index\.html"/);
