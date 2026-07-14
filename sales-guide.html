@@ -30,7 +30,11 @@
     img { display: block; max-width: 100%; height: auto; }
     a { color: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
-    :focus-visible { outline: 3px solid var(--lime); outline-offset: 4px; }
+    :focus-visible {
+      outline: 3px solid var(--magenta);
+      outline-offset: 3px;
+      box-shadow: 0 0 0 6px #fff, 0 0 0 8px var(--deep-navy);
+    }
     .container { width: min(1180px, calc(100% - 2.5rem)); margin-inline: auto; }
     .eyebrow { margin: 0 0 .75rem; font-size: .74rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
     .section-title { margin: 0; font: 700 clamp(2.2rem, 5vw, 4.7rem)/.98 var(--display); letter-spacing: -.04em; }
@@ -185,7 +189,7 @@
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="#awal" data-i18n-aria="aria.home"><img src="jobseeker-logo_transparent.png" alt="Logo Jobseeker"></a>
+      <a class="brand" href="#awal" data-i18n-aria="aria.home"><img src="jobseeker-logo_transparent.png" alt="Logo Jobseeker" data-i18n-alt="image.logo"></a>
       <nav class="site-nav" data-i18n-aria="aria.nav">
         <a href="#paket" data-i18n="nav.packages">Paket</a>
         <a href="#fitur" data-i18n="nav.features">Fitur</a>
@@ -193,8 +197,8 @@
         <a href="#pembayaran" data-i18n="nav.payment">Pembayaran</a>
       </nav>
       <div class="language-switch" role="group" data-i18n-aria="aria.language">
-        <button type="button" data-language="id" aria-pressed="true" aria-label="Gunakan Bahasa Indonesia">ID</button>
-        <button type="button" data-language="en" aria-pressed="false" aria-label="Use English">EN</button>
+        <button type="button" data-language="id" data-i18n-aria="language.id" aria-pressed="true" aria-label="Gunakan Bahasa Indonesia">ID</button>
+        <button type="button" data-language="en" data-i18n-aria="language.en" aria-pressed="false" aria-label="Gunakan Bahasa Inggris">EN</button>
       </div>
       <a class="button button-primary header-cta" href="index.html" data-i18n="nav.calculator">Buka kalkulator</a>
     </div>
@@ -213,7 +217,7 @@
           </div>
         </div>
         <div class="aming-wrap">
-          <img src="aming-official-transparent.png" alt="Aming, pendamping panduan penjualan Jobseeker">
+          <img src="aming-official-transparent.png" alt="Aming, pendamping panduan penjualan Jobseeker" data-i18n-alt="image.aming">
           <p class="aming-note" data-i18n="hero.note">Mulai dari kebutuhan klien, bukan sekadar daftar fitur.</p>
         </div>
       </div>
@@ -352,7 +356,7 @@
   <script>
     const translations = {
       id: {
-        "aria.home": "Kembali ke awal panduan Jobseeker", "aria.nav": "Navigasi panduan", "aria.language": "Pilih bahasa", "aria.comparison": "Tabel perbandingan paket; geser secara horizontal pada layar kecil",
+        "aria.home": "Kembali ke awal panduan Jobseeker", "aria.nav": "Navigasi panduan", "aria.language": "Pilih bahasa", "aria.comparison": "Tabel perbandingan paket; geser secara horizontal pada layar kecil", "image.logo": "Logo Jobseeker", "image.aming": "Aming, pendamping panduan penjualan Jobseeker", "language.id": "Gunakan Bahasa Indonesia", "language.en": "Gunakan Bahasa Inggris",
         "nav.packages": "Paket", "nav.features": "Fitur", "nav.addons": "Tambahan", "nav.payment": "Pembayaran", "nav.calculator": "Buka kalkulator",
         "hero.eyebrow": "Panduan paket Jobseeker", "hero.title": "Pilih. Sesuaikan. Tawarkan dengan percaya diri.", "hero.body": "Temukan paket yang tepat, selaraskan ruang lingkup, lalu lanjutkan ke alat penawaran berbasis penggunaan untuk kebutuhan klien Anda.", "hero.calculator": "Buka alat penawaran", "hero.packages": "Lihat tiga paket ↓", "hero.note": "Mulai dari kebutuhan klien, bukan sekadar daftar fitur.",
         "journey.eyebrow": "Alur percakapan", "journey.title": "Tiga langkah menuju penawaran yang jelas.", "journey.one.title": "Pilih paket", "journey.one.body": "Cocokkan skala operasi dan tingkat layanan dengan Essential, Growth, atau Enterprise.", "journey.two.title": "Sesuaikan ruang lingkup", "journey.two.body": "Tambahkan modul, otomasi, integrasi, atau layanan yang relevan.", "journey.three.title": "Susun penawaran", "journey.three.body": "Gunakan kalkulator terpisah untuk membangun penawaran berbasis penggunaan.",
@@ -370,7 +374,7 @@
         "final.eyebrow": "Langkah berikutnya", "final.title": "Siap menyusun penawaran berdasarkan penggunaan?", "final.body": "Buka kalkulator sebagai alat penawaran terpisah untuk menyesuaikan penggunaan dan kebutuhan klien.", "final.button": "Buka kalkulator →", "footer.copy": "© 2026 Jobseeker. Panduan paket untuk percakapan klien.", "footer.top": "Kembali ke atas ↑"
       },
       en: {
-        "aria.home": "Return to the start of the Jobseeker guide", "aria.nav": "Guide navigation", "aria.language": "Choose language", "aria.comparison": "Tier comparison table; scroll horizontally on small screens",
+        "aria.home": "Return to the start of the Jobseeker guide", "aria.nav": "Guide navigation", "aria.language": "Choose language", "aria.comparison": "Tier comparison table; scroll horizontally on small screens", "image.logo": "Jobseeker logo", "image.aming": "Aming, Jobseeker sales guide companion", "language.id": "Use Indonesian", "language.en": "Use English",
         "nav.packages": "Packages", "nav.features": "Features", "nav.addons": "Add-ons", "nav.payment": "Payment", "nav.calculator": "Open calculator",
         "hero.eyebrow": "Jobseeker package guide", "hero.title": "Choose. Tailor. Offer with confidence.", "hero.body": "Find the right package, align the scope, then continue to the usage-based quote tool for your client’s needs.", "hero.calculator": "Open quote tool", "hero.packages": "See three packages ↓", "hero.note": "Start with the client’s needs, not just a feature list.",
         "journey.eyebrow": "Conversation flow", "journey.title": "Three steps to a clear proposal.", "journey.one.title": "Choose a tier", "journey.one.body": "Match operating scale and service level with Essential, Growth, or Enterprise.", "journey.two.title": "Adjust the scope", "journey.two.body": "Add relevant modules, automation, integrations, or services.", "journey.three.title": "Build the quote", "journey.three.body": "Use the separate calculator to build a usage-based quote.",
@@ -397,6 +401,10 @@
       document.querySelectorAll("[data-i18n]").forEach((element) => {
         const value = translations[selected][element.dataset.i18n];
         if (typeof value === "string") element.textContent = value;
+      });
+      document.querySelectorAll("[data-i18n-alt]").forEach((element) => {
+        const value = translations[selected][element.dataset.i18nAlt];
+        if (typeof value === "string") element.setAttribute("alt", value);
       });
       document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
         const value = translations[selected][element.dataset.i18nAria];
