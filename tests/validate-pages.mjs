@@ -43,6 +43,15 @@ const forbidden = [
 ];
 for (const pattern of forbidden) assert.doesNotMatch(guide, pattern);
 
+const calculatorPresentationForbidden = [
+  /floor price/i,
+  /bd commission/i,
+  /commission is paid/i,
+  /cash collected/i,
+  /ceo approval/i,
+];
+for (const pattern of calculatorPresentationForbidden) assert.doesNotMatch(index, pattern);
+
 for (const engineToken of ["var WORKFORCE", "var HIRING", "var TIERS", "var MODULES", "var MAX_DISCOUNT = 0.15", "function build()"] ) {
   assert.ok(index.includes(engineToken), `Calculator engine token changed or missing: ${engineToken}`);
 }

@@ -248,7 +248,7 @@
       <h1>Price builder</h1>
       <div class="badge">Two numbers. Get the quote.</div>
     </div>
-    <p class="lede">Enter the client's headcount and their hiring volume for the year, switch on the meters they actually run, and the quote builds itself. The floor price is the lowest number you can sign without CEO approval.</p>
+    <p class="lede">Enter the client's headcount and annual hiring volume, select the services they need, and the quote builds itself from their expected usage.</p>
 
     <div class="grid">
 
@@ -282,7 +282,7 @@
 
         <div class="flabel" id="discLabel">Discount on platform fee — 0% — list price</div>
         <input type="range" id="disc" min="0" max="15" step="1" value="0" aria-label="Discount on platform fee, percent">
-        <p class="hint">The only lever BD has, capped at 15%. The workforce fee, the hiring fee, the setup fee and add-ons are never discounted.</p>
+        <p class="hint">Discounts apply only to the platform fee and are capped at 15%. Workforce, hiring, setup, and add-on pricing remains unchanged.</p>
       </div>
 
       <!-- RIGHT -->
@@ -312,10 +312,7 @@
           </table>
           </div>
 
-          <div class="foot">
-            <div class="kpi"><div class="k">Floor price — 15% off platform</div><div class="v" id="kFloor">Rp 226.9jt</div></div>
-            <div class="kpi"><div class="k">BD commission (proposed)</div><div class="v" id="kComm">Rp 19.8jt (7%)</div></div>
-          </div>
+          <div hidden aria-hidden="true"><span id="kFloor"></span><span id="kComm"></span></div>
         </div>
 
         <div class="empty hide" id="empty">
@@ -324,7 +321,7 @@
         </div>
 
         <p class="rules">
-          <b>Setup fee is mandatory and never waived.</b> The employee count and the hire count are written into the PKS and trued up at renewal — there is no unlimited usage. Commission is paid on <b>cash collected</b>, not booked value. Anything below the floor price is <b>CEO approval only</b>.
+          <b>Setup is included in every first-year quote.</b> Employee and hire commitments are recorded in the agreement and reviewed at renewal, keeping pricing aligned with actual usage and the selected services.
         </p>
       </div>
 
