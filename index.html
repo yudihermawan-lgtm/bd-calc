@@ -71,6 +71,10 @@
     font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
     padding:11px 18px;border-radius:999px;white-space:nowrap;
   }
+  .view-switch{display:inline-flex;gap:4px;padding:4px;background:#eef0f8;border:1px solid var(--line);border-radius:999px}
+  .view-option{border:0;background:transparent;color:var(--muted);font:800 13px/1 'Plus Jakarta Sans','Segoe UI',sans-serif;padding:10px 13px;border-radius:999px;cursor:pointer}
+  .view-option.is-active{background:var(--indigo);color:#fff;box-shadow:0 6px 16px rgba(26,31,113,.18)}
+  .view-option:focus-visible,.commission-close:focus-visible{outline:3px solid rgba(230,0,126,.38);outline-offset:3px}
   .lede{color:var(--muted);font-size:16px;line-height:1.55;max-width:640px;margin:14px 0 26px}
   .grid{display:grid;grid-template-columns:315px minmax(0,1fr);gap:40px;align-items:start}
   .grid > *{min-width:0}
@@ -135,6 +139,14 @@
   .kpi.dark{background:var(--indigo);border-color:var(--indigo);box-shadow:0 14px 30px rgba(26,31,113,.16)}
   .kpi.dark .k{color:#A9AEDB}
   .kpi.dark .v{color:#fff}
+  .commission-panel{margin:0 0 28px;padding:24px;border:1px solid #d8dcef;border-left:6px solid var(--magenta);border-radius:18px;background:#fff8fc;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(180px,.8fr);gap:18px}
+  .commission-panel[hidden]{display:none}
+  .commission-kicker{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--magenta)}
+  .commission-amount{background:var(--indigo);color:#fff;border-radius:15px;padding:18px}
+  .commission-amount span{display:block;font-size:13px;color:#bec3e8}.commission-amount strong{display:block;margin-top:6px;font-size:31px}
+  .commission-facts{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0}
+  .commission-facts div{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px}.commission-facts dt{font-size:13px;color:var(--muted)}.commission-facts dd{margin:5px 0 0;font-size:15px;font-weight:800}
+  .commission-note{grid-column:1/-1;margin:0;color:var(--muted);font-size:14px;line-height:1.5}.commission-close{justify-self:start;border:0;background:none;color:var(--magenta);font:800 14px/1.2 inherit;cursor:pointer;padding:5px 0}
 
   h2{font-size:19px;font-weight:800;margin:0 0 4px}
   .table-wrap{width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
@@ -219,6 +231,11 @@
     tr.total td:last-child{padding-right:10px}
     .rules{font-size:12px}
     .empty{padding:26px 16px}
+    .view-switch{width:100%}
+    .view-option{flex:1}
+    .commission-panel{grid-template-columns:minmax(0,1fr);padding:18px}
+    .commission-facts{grid-template-columns:1fr}
+    .commission-amount,.commission-facts,.commission-note{grid-column:1}
   }
   @media (prefers-reduced-motion:no-preference){
     .kpi .v{transition:color .15s ease}
@@ -244,6 +261,10 @@
     <div class="head">
       <h1>Price builder</h1>
       <div class="badge">Two numbers. Get the quote.</div>
+      <div class="view-switch" role="group" aria-label="Calculator presentation">
+        <button type="button" id="viewClient" class="view-option is-active" aria-pressed="true">Client view</button>
+        <button type="button" id="viewBd" class="view-option" aria-pressed="false">BD view</button>
+      </div>
     </div>
     <p class="lede">Enter the client's headcount and annual hiring volume, select the services they need, and the quote builds itself from their expected usage.</p>
 
@@ -299,6 +320,25 @@
             <div class="kpi dark"><div class="k">Year-1 TCV</div><div class="v" id="kTcv">Rp 283.4jt</div></div>
           </div>
 
+          <section id="bdCommissionPanel" class="commission-panel" hidden aria-hidden="true" aria-labelledby="bdCommissionTitle">
+            <div class="commission-intro">
+              <span class="commission-kicker">Internal &middot; Sales division</span>
+              <h2 id="bdCommissionTitle">Estimated BD commission</h2>
+              <p id="bdCommissionMessage">Based on final Year-1 TCV and the committed employee headcount.</p>
+            </div>
+            <div class="commission-amount">
+              <span>Estimated amount</span>
+              <strong id="bdCommissionValue">&mdash;</strong>
+            </div>
+            <dl class="commission-facts">
+              <div><dt>Rate</dt><dd id="bdCommissionRate">&mdash;</dd></div>
+              <div><dt>Headcount band</dt><dd id="bdCommissionBand">&mdash;</dd></div>
+              <div><dt>Final Y1 TCV basis</dt><dd id="bdCommissionBasis">&mdash;</dd></div>
+            </dl>
+            <p class="commission-note">The rate follows headcount only. Discounts lower both final TCV and commission.</p>
+            <button type="button" id="returnClientView" class="commission-close">Switch to Client view</button>
+          </section>
+
           <h2>How this price is built</h2>
           <div class="table-wrap" role="region" aria-label="Price calculation details" tabindex="0">
           <table>
@@ -309,7 +349,7 @@
           </table>
           </div>
 
-          <div hidden aria-hidden="true"><span id="kFloor"></span><span id="kComm"></span></div>
+          <div hidden aria-hidden="true"><span id="kFloor"></span></div>
         </div>
 
         <div class="empty hide" id="empty">
@@ -352,11 +392,26 @@
   //   500 emp -> 150 hires | 2,000 emp -> 600 hires | 10,000 emp -> 3,000 hires.
   // NOTE: the hiring PRICE bands below (1-100 / 101-500 / ...) set the RATE, not the TIER.
   var TIERS = [
-    {name:"Essential",        empLo:1,     empHi:500,   hireLo:1,    hireHi:150,  platform:70,  setup:15,  min:90,   comm:0.06},
-    {name:"Growth",           empLo:501,   empHi:2000,  hireLo:151,  hireHi:600,  platform:110, setup:40,  min:180,  comm:0.07},
-    {name:"Enterprise",       empLo:2001,  empHi:10000, hireLo:601,  hireHi:3000, platform:180, setup:90,  min:400,  comm:0.08},
-    {name:"Enterprise Scale", empLo:10001, empHi:INF,   hireLo:3001, hireHi:INF,  platform:350, setup:200, min:1000, comm:0.08}
+    {name:"Essential",        empLo:1,     empHi:500,   hireLo:1,    hireHi:150,  platform:70,  setup:15,  min:90},
+    {name:"Growth",           empLo:501,   empHi:2000,  hireLo:151,  hireHi:600,  platform:110, setup:40,  min:180},
+    {name:"Enterprise",       empLo:2001,  empHi:10000, hireLo:601,  hireHi:3000, platform:180, setup:90,  min:400},
+    {name:"Enterprise Scale", empLo:10001, empHi:INF,   hireLo:3001, hireHi:INF,  platform:350, setup:200, min:1000}
   ];
+  var COMMISSION_BANDS = [
+    {name:"Essential",lo:1,hi:500,rate:0.06},
+    {name:"Growth",lo:501,hi:2000,rate:0.07},
+    {name:"Enterprise",lo:2001,hi:10000,rate:0.08},
+    {name:"Enterprise Scale",lo:10001,hi:INF,rate:0.08}
+  ];
+
+  function commissionBandByHeadcount(headcount){
+    if(headcount < 1) return null;
+    for(var i=0;i<COMMISSION_BANDS.length;i++){
+      var band = COMMISSION_BANDS[i];
+      if(headcount >= band.lo && headcount <= band.hi) return band;
+    }
+    return null;
+  }
   var MODULES = [
     {id:"aPay", label:"Payroll &amp; Attendance", rate:2500},
     {id:"aPms", label:"PMS",                      rate:1500},
@@ -372,6 +427,18 @@
     return "Rp " + (r % 1 === 0 ? r.toFixed(0) : r.toFixed(1)) + "jt";
   };
   var cell = function(v){ var r = Math.round(v*10)/10; return (r % 1 === 0 ? r.toFixed(1) : r.toFixed(1)); };
+  var calculatorView = "client";
+
+  function setCalculatorView(view){
+    calculatorView = view === "bd" ? "bd" : "client";
+    var isBd = calculatorView === "bd";
+    $("viewClient").classList.toggle("is-active", !isBd);
+    $("viewBd").classList.toggle("is-active", isBd);
+    $("viewClient").setAttribute("aria-pressed", String(!isBd));
+    $("viewBd").setAttribute("aria-pressed", String(isBd));
+    $("bdCommissionPanel").hidden = !isBd;
+    $("bdCommissionPanel").setAttribute("aria-hidden", String(!isBd));
+  }
 
   function slices(qty, bands, months){
     var out = [], i;
@@ -462,7 +529,8 @@
     var blocked = discAmt > applied + 1e-9;
     var tcv     = sub + t.setup;
     var floor   = Math.max(listSub - t.platform * MAX_DISCOUNT, minContract);
-    var comm    = tcv * t.comm;
+    var commissionBand = commissionBandByHeadcount(emp);
+    var commission = commissionBand ? tcv * commissionBand.rate : null;
 
     // ---- render ----
     $("tier").textContent = t.name;
@@ -474,7 +542,20 @@
     $("kSetup").textContent = jt(t.setup);
     $("kTcv").textContent   = jt(tcv);
     $("kFloor").textContent = jt(floor);
-    $("kComm").textContent  = jt(comm) + " (" + Math.round(t.comm*100) + "%)";
+
+    if(commissionBand){
+      $("bdCommissionValue").textContent = jt(commission);
+      $("bdCommissionRate").textContent = Math.round(commissionBand.rate * 100) + "%";
+      $("bdCommissionBand").textContent = commissionBand.name + " · " + n0(commissionBand.lo) + (commissionBand.hi === INF ? "+ employees" : "–" + n0(commissionBand.hi) + " employees");
+      $("bdCommissionBasis").textContent = jt(tcv);
+      $("bdCommissionMessage").textContent = "Quote tier: " + t.name + " · Commission band: " + commissionBand.name;
+    }else{
+      $("bdCommissionValue").textContent = "—";
+      $("bdCommissionRate").textContent = "—";
+      $("bdCommissionBand").textContent = "Headcount required";
+      $("bdCommissionBasis").textContent = jt(tcv);
+      $("bdCommissionMessage").textContent = "Enter the committed headcount to calculate commission.";
+    }
 
     $("discLabel").textContent = "Discount on platform fee — " + Math.round(d*100) + "% — "
       + (d === 0 ? "list price" : "−" + jt(discAmt).replace("Rp ",""));
@@ -526,6 +607,10 @@
     $(id).addEventListener("input", build);
     $(id).addEventListener("change", build);
   });
+  $("viewClient").addEventListener("click", function(){ setCalculatorView("client"); });
+  $("returnClientView").addEventListener("click", function(){ setCalculatorView("client"); });
+  $("viewBd").addEventListener("click", function(){ setCalculatorView("bd"); });
+  setCalculatorView("client");
   build();
 })();
 </script>
