@@ -76,6 +76,11 @@ assert.match(guide, /--font-price-mobile:\s*36px/);
 assert.match(guide, /--font-price-desktop:\s*42px/);
 assert.match(guide, /--font-heading-mobile:\s*30px/);
 assert.match(guide, /--font-heading-desktop:\s*38px/);
+assert.match(guide, /\.section-title\{[^}]*font-size:var\(--font-heading-desktop\)/, "Desktop section titles must use the 38px floor token");
+assert.match(guide, /\.package-price\{[^}]*font-size:var\(--font-price-desktop\)/, "Desktop package prices must use the 42px floor token");
+assert.match(guide, /\.section-title\{font-size:clamp\(var\(--font-heading-mobile\),[^}]*var\(--font-heading-desktop\)\)/, "Mobile section titles must retain fluid floor-safe sizing");
+assert.match(guide, /\.package-price\{font-size:clamp\(var\(--font-price-mobile\),[^}]*var\(--font-price-desktop\)\)/, "Mobile package prices must retain fluid floor-safe sizing");
+assert.match(guide, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "Guide must declare a self-contained favicon");
 
 assert.equal((guide.match(/class="comparison-row"/g) || []).length, 14);
 assert.equal((guide.match(/class="addon-item"/g) || []).length, 14);

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Panduan paket Jobseeker untuk membandingkan harga, kapasitas, dukungan, dan pilihan tambahan.">
   <title>Panduan Paket Jobseeker</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23071a70'/%3E%3Ccircle cx='47' cy='17' r='10' fill='%23e6007e'/%3E%3Cpath d='M20 18v22c0 7 4 10 10 10s10-3 10-10V18' fill='none' stroke='white' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
   <style>
     :root{
       --font-body:16px;
@@ -32,7 +33,7 @@
     .layout-grid>*{min-width:0}
     .support-text,.chip,.button,.site-header a,.guide-table th,.guide-table td{font-size:var(--font-support)}
     .overline{display:block;margin:0 0 12px;font-size:var(--font-overline);font-weight:800;letter-spacing:.16em;text-transform:uppercase}
-    .section-title{margin:0;font-family:var(--display);font-size:clamp(var(--font-heading-mobile),4vw,var(--font-heading-desktop));line-height:1.08;letter-spacing:-.025em}
+    .section-title{margin:0;font-family:var(--display);font-size:var(--font-heading-desktop);line-height:1.08;letter-spacing:-.025em}
     .section-lead{max-width:660px;margin:14px 0 0;color:var(--muted)}
     .section-head{display:flex;justify-content:space-between;align-items:end;gap:28px;margin-bottom:32px}
     .section-head>div{min-width:0}
@@ -64,7 +65,7 @@
     .chip{align-self:flex-start;margin-bottom:18px;padding:5px 9px;border-radius:999px;background:#edf0ff;color:var(--navy);font-weight:800}
     .featured .chip{background:var(--lime)}
     .package-card h3{margin:0;font:700 29px/1.05 var(--display)}
-    .package-price{display:block;margin-top:22px;font-family:var(--display);font-size:clamp(var(--font-price-mobile),5vw,var(--font-price-desktop));line-height:1;color:var(--navy);font-weight:700;letter-spacing:-.03em}
+    .package-price{display:block;margin-top:22px;font-family:var(--display);font-size:var(--font-price-desktop);line-height:1;color:var(--navy);font-weight:700;letter-spacing:-.03em}
     [data-price-label]{display:block;margin-top:7px;color:var(--muted);font-size:var(--font-support);font-weight:700}
     .tier-scale{display:flex;align-items:end;gap:5px;height:40px;margin:23px 0 18px;padding-bottom:4px;border-bottom:1px solid var(--border-subtle)}
     .tier-scale span{width:26px;border-radius:3px 3px 0 0;background:var(--border-strong)}.tier-scale span:nth-child(1){height:12px}.tier-scale span:nth-child(2){height:22px}.tier-scale span:nth-child(3){height:34px}
@@ -94,7 +95,7 @@
     .guide-cta{color:#fff;background:var(--magenta)}.cta-inner{display:flex;align-items:end;justify-content:space-between;gap:30px}.guide-cta .section-title{max-width:730px}.guide-cta p{max-width:650px;margin:14px 0 0;color:#fff0f8}
     footer{padding:24px 0;color:#dbe0ff;background:var(--deep)}.footer-inner{display:flex;justify-content:space-between;gap:18px}.footer-inner a{font-size:var(--font-support)}
     @media(max-width:900px){.site-header nav{display:none}.catalogue-groups{grid-template-columns:1fr}.feature-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.feature-summary:last-child{grid-column:1/-1}.payment-layout{grid-template-columns:1fr}.catalogue-main{align-items:flex-start}}
-    @media(max-width:760px){html{scroll-padding-top:148px}.hero,.package-grid{grid-template-columns:minmax(0,1fr)}.hero-copy{padding:58px 16px 42px}.hero h1{font-size:clamp(44px,13vw,66px)}.hero-art{min-height:260px}.hero-art img{max-width:min(100%,360px);max-height:390px}.site-header{flex-wrap:wrap;gap:8px 12px}.site-header nav{width:100%}.brand img{width:122px}.language-switch{margin-left:auto}.header-calculator{width:100%;min-height:42px}.section-head,.pricing-tools,.cta-inner{align-items:flex-start;flex-direction:column}.package-card{padding:23px}.feature-strip,.catalogue-summary,.overage-grid,.addon-notes{grid-template-columns:1fr}.feature-summary:last-child{grid-column:auto}.catalogue-main,.overage-item{flex-direction:column}.catalogue-price,.overage-item strong{text-align:left}.footer-inner{flex-direction:column}}
+    @media(max-width:760px){html{scroll-padding-top:148px}.hero,.package-grid{grid-template-columns:minmax(0,1fr)}.hero-copy{padding:58px 16px 42px}.hero h1{font-size:clamp(44px,13vw,66px)}.section-title{font-size:clamp(var(--font-heading-mobile),9vw,var(--font-heading-desktop))}.package-price{font-size:clamp(var(--font-price-mobile),10vw,var(--font-price-desktop))}.hero-art{min-height:260px}.hero-art img{max-width:min(100%,360px);max-height:390px}.site-header{flex-wrap:wrap;gap:8px 12px}.site-header nav{width:100%}.brand img{width:122px}.language-switch{margin-left:auto}.header-calculator{width:100%;min-height:42px}.section-head,.pricing-tools,.cta-inner{align-items:flex-start;flex-direction:column}.package-card{padding:23px}.feature-strip,.catalogue-summary,.overage-grid,.addon-notes{grid-template-columns:1fr}.feature-summary:last-child{grid-column:auto}.catalogue-main,.overage-item{flex-direction:column}.catalogue-price,.overage-item strong{text-align:left}.footer-inner{flex-direction:column}}
     @media(max-width:380px){.container{width:min(100% - 24px,1160px)}.language-switch button{padding-inline:10px}.package-card{padding:19px}.scope-panel{padding:22px;box-shadow:6px 6px 0 var(--lime)}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
