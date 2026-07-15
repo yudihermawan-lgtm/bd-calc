@@ -80,7 +80,6 @@ for (const pattern of forbidden) {
 
 const calculatorPresentationForbidden = [
   /floor price/i,
-  /bd commission/i,
   /commission is paid/i,
   /cash collected/i,
   /ceo approval/i,
@@ -90,6 +89,32 @@ for (const pattern of calculatorPresentationForbidden) assert.doesNotMatch(index
 for (const engineToken of ["var WORKFORCE", "var HIRING", "var TIERS", "var MODULES", "var MAX_DISCOUNT = 0.15", "function build()"] ) {
   assert.ok(index.includes(engineToken), `Calculator engine token changed or missing: ${engineToken}`);
 }
+
+assert.match(index, /id="viewClient"[^>]*aria-pressed="true"/);
+assert.match(index, /id="viewBd"[^>]*aria-pressed="false"/);
+assert.match(index, /id="bdCommissionPanel"[^>]*hidden[^>]*aria-hidden="true"/);
+assert.match(index, /id="bdCommissionValue"/);
+assert.match(index, /id="bdCommissionRate"/);
+assert.match(index, /id="bdCommissionBand"/);
+assert.match(index, /id="bdCommissionBasis"/);
+assert.match(index, /var COMMISSION_BANDS\s*=\s*\[/);
+assert.match(index, /function commissionBandByHeadcount\s*\(/);
+assert.match(index, /function setCalculatorView\s*\(/);
+
+for (const token of [
+  '{name:"Essential",lo:1,hi:500,rate:0.06}',
+  '{name:"Growth",lo:501,hi:2000,rate:0.07}',
+  '{name:"Enterprise",lo:2001,hi:10000,rate:0.08}',
+  '{name:"Enterprise Scale",lo:10001,hi:INF,rate:0.08}',
+]) {
+  assert.ok(index.includes(token), `Missing commission band: ${token}`);
+}
+
+for (const persistenceApi of [/localStorage/i, /sessionStorage/i, /document\.cookie/i, /URLSearchParams/i]) {
+  assert.doesNotMatch(index, persistenceApi, `View state must not persist through ${persistenceApi}`);
+}
+
+assert.doesNotMatch(index, /t\.comm|TIERS\[[^\]]+\]\.comm/);
 
 for (const broken of [/â€”/, /â€“/, /Ã—/, /âˆ’/, /â€™/, /â€œ/, /â€/]) {
   assert.doesNotMatch(index, broken);
