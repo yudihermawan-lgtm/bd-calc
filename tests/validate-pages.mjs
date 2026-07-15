@@ -54,6 +54,39 @@ assert.match(guide, /const DEFAULT_LANGUAGE = "id";/);
 assert.match(guide, /aria-pressed/);
 assert.match(guide, /prefers-reduced-motion/);
 
+for (const id of ["packages", "compare", "addons", "payments", "guideCta"]) {
+  assert.match(guide, new RegExp(`id=["']${id}["']`), `Missing graphical guide section: ${id}`);
+}
+
+for (const id of ["priceYear1", "priceRenewal"]) {
+  assert.match(guide, new RegExp(`id=["']${id}["']`), `Missing price-context control: ${id}`);
+}
+
+assert.match(guide, /id="priceYear1"[^>]*aria-pressed="true"/);
+assert.match(guide, /id="priceRenewal"[^>]*aria-pressed="false"/);
+assert.match(guide, /function setPriceContext\s*\(/);
+assert.match(guide, /data-year1="Rp135 juta"[^>]*data-renewal="Rp110 juta"/);
+assert.match(guide, /data-year1="Rp225 juta"[^>]*data-renewal="Rp175 juta"/);
+assert.match(guide, /data-year1="Rp450 juta"[^>]*data-renewal="Rp350 juta"/);
+
+assert.match(guide, /--font-body:\s*16px/);
+assert.match(guide, /--font-support:\s*14px/);
+assert.match(guide, /--font-overline:\s*13px/);
+assert.match(guide, /--font-price-mobile:\s*36px/);
+assert.match(guide, /--font-price-desktop:\s*42px/);
+assert.match(guide, /--font-heading-mobile:\s*30px/);
+assert.match(guide, /--font-heading-desktop:\s*38px/);
+
+assert.equal((guide.match(/class="comparison-row"/g) || []).length, 14);
+assert.equal((guide.match(/class="addon-item"/g) || []).length, 14);
+assert.equal((guide.match(/class="overage-item"/g) || []).length, 7);
+assert.equal((guide.match(/class="payment-item"/g) || []).length, 9);
+assert.equal((guide.match(/class="scope-note"/g) || []).length, 4);
+
+for (const disclosure of ["comparisonDetails", "addonDetails", "paymentDetails"]) {
+  assert.match(guide, new RegExp(`id=["']${disclosure}["']`));
+}
+
 for (const price of ["Rp110 juta", "Rp25 juta", "Rp135 juta", "Rp175 juta", "Rp50 juta", "Rp225 juta", "Rp350 juta", "Rp100 juta", "Rp450 juta"]) {
   assert.ok(guide.includes(price), `Missing public workbook price: ${price}`);
 }
