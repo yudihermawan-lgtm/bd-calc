@@ -73,7 +73,7 @@ for (const persistenceApi of [/localStorage/i, /sessionStorage/i, /document\.coo
 assert.doesNotMatch(index, /t\.comm|TIERS\[[^\]]+\]\.comm/);
 ```
 
-Retain every existing safety, translation, local-resource, price, and mojibake assertion.
+Retain every existing translation, local-resource, price, mojibake, and non-commission safety assertion. Update the existing `calculatorPresentationForbidden` list by removing only `/bd commission/i`; the approved internal phrase now exists in the hidden-by-default panel and commission script. Keep the prohibitions for floor-price, cash-collected, commission-payment, and CEO-approval language. The new default-hidden markup assertions plus Task 3 browser accessibility checks become the regression boundary that prevents accidental Client-view exposure.
 
 - [ ] **Step 2: Run the contract test to confirm RED**
 
