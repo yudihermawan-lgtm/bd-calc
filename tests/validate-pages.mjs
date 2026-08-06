@@ -125,8 +125,12 @@ const calculatorPresentationForbidden = [
 ];
 for (const pattern of calculatorPresentationForbidden) assert.doesNotMatch(index, pattern);
 
-for (const engineToken of ["var WORKFORCE", "var HIRING", "var TIERS", "var MODULES", "var MAX_DISCOUNT = 0.15", "function build()"] ) {
+for (const engineToken of ["var TIERS", "var MODULES", "var MAX_DISCOUNT = 0.15", "var CUSTOM_QUOTE_EMP", "var CUSTOM_QUOTE_HIRE", "function build()"] ) {
   assert.ok(index.includes(engineToken), `Calculator engine token changed or missing: ${engineToken}`);
+}
+// Flat-tier engine (approved V6 book): no per-employee/per-hire marginal meters.
+for (const removedToken of ["var WORKFORCE", "var HIRING", "function slices("]) {
+  assert.ok(!index.includes(removedToken), `Calculator engine must not reintroduce marginal usage meter: ${removedToken}`);
 }
 
 assert.match(index, /id="viewClient"[^>]*aria-pressed="true"/);
@@ -140,14 +144,16 @@ assert.match(index, /var COMMISSION_BANDS\s*=\s*\[/);
 assert.match(index, /function commissionBandByHeadcount\s*\(/);
 assert.match(index, /function setCalculatorView\s*\(/);
 
-for (const token of [
-  '{name:"Essential",lo:1,hi:500,rate:0.06}',
-  '{name:"Growth",lo:501,hi:2000,rate:0.07}',
-  '{name:"Enterprise",lo:2001,hi:10000,rate:0.08}',
-  '{name:"Enterprise Scale",lo:10001,hi:INF,rate:0.08}',
+// Commission bands now mirror the three approved tiers 1:1 (no separate "Enterprise Scale" split).
+for (const [name, lo, hi, rate] of [
+  ["Essential", "1", "500", "0.06"],
+  ["Growth", "501", "2000", "0.07"],
+  ["Enterprise", "2001", "INF", "0.08"],
 ]) {
-  assert.ok(index.includes(token), `Missing commission band: ${token}`);
+  const pattern = new RegExp(`\\{name:"${name}",\\s*lo:${lo},\\s*hi:${hi},\\s*rate:${rate}\\}`);
+  assert.match(index, pattern, `Missing commission band: ${name}`);
 }
+assert.doesNotMatch(index, /Enterprise Scale/, "Calculator must not reintroduce the unapproved fourth tier");
 
 for (const persistenceApi of [/localStorage/i, /sessionStorage/i, /document\.cookie/i, /URLSearchParams/i]) {
   assert.doesNotMatch(index, persistenceApi, `View state must not persist through ${persistenceApi}`);

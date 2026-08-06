@@ -140,6 +140,11 @@
   .kpi.dark{background:var(--indigo);border-color:var(--indigo);box-shadow:0 14px 30px rgba(26,31,113,.16)}
   .kpi.dark .k{color:#A9AEDB}
   .kpi.dark .v{color:#fff}
+  .scope-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:0 0 26px}
+  .scope-grid div{background:var(--shade);border:1px solid rgba(26,31,113,.04);border-radius:12px;padding:12px 13px}
+  .scope-grid dt{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0}
+  .scope-grid dd{margin:6px 0 0;font-size:13px;font-weight:700;color:var(--indigo);line-height:1.35}
+  @media (max-width:900px){.scope-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   .commission-panel{margin:0 0 28px;padding:24px;border:1px solid #d8dcef;border-left:6px solid var(--magenta);border-radius:18px;background:#fff8fc;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(180px,.8fr);gap:18px}
   .commission-panel[hidden]{display:none}
   .commission-kicker{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--magenta)}
@@ -253,7 +258,7 @@
       <img src="jobseeker-logo_transparent.png" alt="Jobseeker Company">
     </a>
     <div class="nav-actions">
-      <span class="tool-label">Usage-based sales pricing tool</span>
+      <span class="tool-label">Tier-based sales pricing tool</span>
       <a class="guide-link" href="sales-guide.html">Panduan Produk <span aria-hidden="true">→</span></a>
     </div>
   </header>
@@ -267,7 +272,7 @@
         <button type="button" id="viewBd" class="view-option" aria-pressed="false">BD view</button>
       </div>
     </div>
-    <p class="lede">Enter the client's headcount and annual hiring volume, select the services they need, and the quote builds itself from their expected usage.</p>
+    <p class="lede">Enter the client's headcount and annual hiring volume to find their tier, add any modules they need, and the quote builds itself.</p>
 
     <div class="grid">
 
@@ -283,25 +288,29 @@
 
         <div class="flabel">Annual hires</div>
         <input class="num" id="hire" type="number" min="0" max="200000" step="1" value="300" inputmode="numeric" aria-label="Annual hires">
-        <p class="hint">Annual hiring commitments keep the quote aligned with the client&rsquo;s expected recruitment usage.</p>
+        <p class="hint">Annual hiring commitments keep the quote aligned with the client&rsquo;s expected recruitment usage. Hires beyond the tier&rsquo;s bundled cap add a small overage.</p>
 
-        <div class="sect">Meters the client runs</div>
-        <label class="opt ats"><input type="checkbox" id="mAts" checked><span>Recruitment (ATS) — turns the hiring fee on</span></label>
-        <label class="opt hris"><input type="checkbox" id="mHris" checked><span>Workforce (HRIS) — turns the workforce fee on</span></label>
+        <hr class="rule">
+
+        <div class="flabel">Branches / locations needed</div>
+        <input class="num" id="branches" type="number" min="0" max="500" step="1" value="3" inputmode="numeric" aria-label="Branches or locations needed">
+        <p class="hint">Included up to the tier&rsquo;s cap. Extra branches beyond that add a small annual overage.</p>
 
         <hr class="rule">
 
         <div class="sect">Add-on modules</div>
-        <label class="opt mod" id="lPay"><input type="checkbox" id="aPay"><span>Payroll &amp; Attendance — Rp 2,500/emp/mo</span></label>
-        <label class="opt mod" id="lPms"><input type="checkbox" id="aPms"><span>PMS — Rp 1,500/emp/mo</span></label>
-        <label class="opt mod" id="lLms"><input type="checkbox" id="aLms"><span>LMS — Rp 1,500/emp/mo</span></label>
-        <p class="hint" id="modHint">Core HRIS is already in the workforce fee — these are the modules on top of it.</p>
+        <label class="opt mod" id="lHris"><input type="checkbox" id="aHris"><span>Full HRIS upgrade — Rp 35jt/yr</span></label>
+        <label class="opt mod" id="lPay"><input type="checkbox" id="aPay"><span>Payroll — Rp 45jt/yr</span></label>
+        <label class="opt mod" id="lAtt"><input type="checkbox" id="aAtt"><span>Attendance — Rp 30jt/yr</span></label>
+        <label class="opt mod" id="lPms"><input type="checkbox" id="aPms"><span>PMS — Rp 30jt/yr</span></label>
+        <label class="opt mod" id="lLms"><input type="checkbox" id="aLms"><span>LMS — Rp 30jt/yr</span></label>
+        <p class="hint" id="modHint">Flat annual add-ons on top of the platform fee. Full HRIS upgrade is Essential-only — Growth and Enterprise already include full HRIS.</p>
 
         <hr class="rule">
 
         <div class="flabel" id="discLabel">Discount on platform fee — 0% — list price</div>
         <input type="range" id="disc" min="0" max="15" step="1" value="0" aria-label="Discount on platform fee, percent">
-        <p class="hint">Discounts apply only to the platform fee and are capped at 15%. Workforce, hiring, setup, and add-on pricing remains unchanged.</p>
+        <p class="hint">Discounts apply only to the platform fee and are capped at 15%. Setup and add-on pricing are never discounted.</p>
       </div>
 
       <!-- RIGHT -->
@@ -320,6 +329,14 @@
             <div class="kpi"><div class="k">Setup fee (one-time)</div><div class="v" id="kSetup">Rp 40jt</div></div>
             <div class="kpi dark"><div class="k">Year-1 TCV</div><div class="v" id="kTcv">Rp 283.4jt</div></div>
           </div>
+
+          <dl class="scope-grid" id="scopeBox" aria-label="What's included in this tier">
+            <div><dt>Candidate processing</dt><dd id="scCandidates">&mdash;</dd></div>
+            <div><dt>HRIS</dt><dd id="scHris">&mdash;</dd></div>
+            <div><dt>Admin users</dt><dd id="scAdmins">&mdash;</dd></div>
+            <div><dt>Branches / locations</dt><dd id="scBranches">&mdash;</dd></div>
+            <div><dt>Support</dt><dd id="scSupport">&mdash;</dd></div>
+          </dl>
 
           <section id="bdCommissionPanel" class="commission-panel" hidden aria-hidden="true" aria-labelledby="bdCommissionTitle">
             <div class="commission-intro">
@@ -350,16 +367,15 @@
           </table>
           </div>
 
-          <div hidden aria-hidden="true"><span id="kFloor"></span></div>
         </div>
 
         <div class="empty hide" id="empty">
-          <b>Switch on at least one meter.</b>
-          A client is either recruiting, managing a workforce, or both. Without a meter there is nothing to price.
+          <b>This deal needs a custom quote.</b>
+          Headcount or annual hires is beyond the standard tiers — route to Finance/CEO for custom pricing (Add-ons &amp; Overage, on-premise rules apply).
         </div>
 
         <p class="rules">
-          <b>Setup is included in every first-year quote.</b> Employee and hire commitments are recorded in the agreement and reviewed at renewal, keeping pricing aligned with actual usage and the selected services.
+          <b>Setup is included in every first-year quote and is never waived by default.</b> Employee and hire commitments set the tier at signing and are reviewed at renewal.
         </p>
       </div>
 
@@ -372,39 +388,28 @@
   "use strict";
   var INF = Infinity;
 
-  // ---- RATE CARD (source: PROPOSED PRICING FOR SOFTWARE — tabs 2, 3, 6, 10) ----
-  var WORKFORCE = [ // Rp / employee / month, marginal bands
-    {lo:1,     hi:500,    rate:8000},
-    {lo:501,   hi:2000,   rate:6000},
-    {lo:2001,  hi:10000,  rate:3500},
-    {lo:10001, hi:50000,  rate:2000},
-    {lo:50001, hi:INF,    rate:1200}
-  ];
-  var HIRING = [ // Rp / hire / year, marginal bands
-    {lo:1,     hi:100,    rate:150000},
-    {lo:101,   hi:500,    rate:100000},
-    {lo:501,   hi:2000,   rate:60000},
-    {lo:2001,  hi:10000,  rate:40000},
-    {lo:10001, hi:INF,    rate:25000}
-  ];
-  // TIER LADDER. The tier is the SIZE OF THE COMPANY, not the size of the invoice.
-  // Headcount bands come straight from the rate card (tab 2A).
-  // The hiring ladder is the same ladder read at a normal 30%/yr turnover:
-  //   500 emp -> 150 hires | 2,000 emp -> 600 hires | 10,000 emp -> 3,000 hires.
-  // NOTE: the hiring PRICE bands below (1-100 / 101-500 / ...) set the RATE, not the TIER.
+  // ---- APPROVED V6 PRICE BOOK (source: jobseeker_v6_pricing_components.xlsx —
+  // "Pricing Summary" / "Tier Scope" / "Add-ons & Overage", CEO + Finance signed off) ----
+  // Y1 = Platform Fee + Setup Fee. Tier is set by HEADCOUNT only — that's what tracks
+  // HRIS/deployment scope (admin users, branches, support level). Annual hires, admin
+  // users, and branches are bundled up to each tier's cap; beyond the cap they add a
+  // small overage (Add-ons & Overage tab), never a full extra tier.
   var TIERS = [
-    {name:"Essential",        empLo:1,     empHi:500,   hireLo:1,    hireHi:150,  platform:70,  setup:15,  min:90},
-    {name:"Growth",           empLo:501,   empHi:2000,  hireLo:151,  hireHi:600,  platform:110, setup:40,  min:180},
-    {name:"Enterprise",       empLo:2001,  empHi:10000, hireLo:601,  hireHi:3000, platform:180, setup:90,  min:400},
-    {name:"Enterprise Scale", empLo:10001, empHi:INF,   hireLo:3001, hireHi:INF,  platform:350, setup:200, min:1000}
+    {name:"Essential", empLo:1,    empHi:500,   hireHi:150,  adminsCap:3,  branchesCap:3,
+     platform:110, setup:25,
+     scope:{candidates:"Up to 1,500 / month", hris:"Basic / limited", support:"Ticket / email"}},
+    {name:"Growth",     empLo:501, empHi:2000,  hireHi:600,  adminsCap:10, branchesCap:10,
+     platform:175, setup:50,
+     scope:{candidates:"Up to 5,000 / month", hris:"Included", support:"WhatsApp priority, working hours"}},
+    {name:"Enterprise", empLo:2001,empHi:10000, hireHi:3000, adminsCap:50, branchesCap:100,
+     platform:350, setup:100,
+     scope:{candidates:"Up to 20,000 / month", hris:"Included", support:"Dedicated AM, working-hours SLA"}}
   ];
   var COMMISSION_BANDS = [
-    {name:"Essential",lo:1,hi:500,rate:0.06},
-    {name:"Growth",lo:501,hi:2000,rate:0.07},
-    {name:"Enterprise",lo:2001,hi:10000,rate:0.08},
-    {name:"Enterprise Scale",lo:10001,hi:INF,rate:0.08}
+    {name:"Essential",lo:1,   hi:500,  rate:0.06},
+    {name:"Growth",   lo:501, hi:2000, rate:0.07},
+    {name:"Enterprise",lo:2001,hi:INF, rate:0.08}
   ];
-
   function commissionBandByHeadcount(headcount){
     if(headcount < 1) return null;
     for(var i=0;i<COMMISSION_BANDS.length;i++){
@@ -413,12 +418,31 @@
     }
     return null;
   }
+
+  // Flat annual add-ons (source: Add-ons & Overage tab) — not metered per employee.
   var MODULES = [
-    {id:"aPay", label:"Payroll &amp; Attendance", rate:2500},
-    {id:"aPms", label:"PMS",                      rate:1500},
-    {id:"aLms", label:"LMS",                      rate:1500}
+    {id:"aHris", label:"Full HRIS upgrade", annual:35, essentialOnly:true},
+    {id:"aPay",  label:"Payroll",           annual:45},
+    {id:"aAtt",  label:"Attendance",        annual:30},
+    {id:"aPms",  label:"PMS",               annual:30},
+    {id:"aLms",  label:"LMS",               annual:30}
   ];
   var MAX_DISCOUNT = 0.15;
+
+  // Overage rates for volume beyond a tier's bundled cap (Rp jt / unit / year).
+  // Branches is taken straight from Add-ons & Overage. The hire rate is an illustrative
+  // translation from "Extra processed candidates — Rp2-3jt/1,000" assuming a typical
+  // screening-to-hire funnel — replace with a real conversion ratio when available.
+  // (Admin-user overage was dropped: it's an internal system-configuration decision made
+  // during onboarding, not something a rep knows at quoting time — see the "not relevant"
+  // call. Admin cap is still shown in the scope box as reference, just never billed here.)
+  var HIRE_OVERAGE_RATE    = 0.015; // ~Rp15,000 / extra hire beyond the tier's cap
+  var BRANCH_OVERAGE_RATE  = 1;     // Rp1jt / extra branch / year
+
+  // Beyond these, the deal is outside every approved tier — the price book requires a
+  // custom quote (CEO + Tech + Finance approval), not an extrapolated standard price.
+  var CUSTOM_QUOTE_EMP  = 10000;
+  var CUSTOM_QUOTE_HIRE = 3000;
 
   // ---- helpers ----
   var $ = function(id){ return document.getElementById(id); };
@@ -427,7 +451,7 @@
     var r = Math.round(v*10)/10;
     return "Rp " + (r % 1 === 0 ? r.toFixed(0) : r.toFixed(1)) + "jt";
   };
-  var cell = function(v){ var r = Math.round(v*10)/10; return (r % 1 === 0 ? r.toFixed(1) : r.toFixed(1)); };
+  var cell = function(v){ var r = Math.round(v*10)/10; return r.toFixed(1); };
   var calculatorView = "client";
 
   function setCalculatorView(view){
@@ -441,22 +465,11 @@
     $("bdCommissionPanel").setAttribute("aria-hidden", String(!isBd));
   }
 
-  function slices(qty, bands, months){
-    var out = [], i;
-    for(i=0;i<bands.length;i++){
-      var b = bands[i];
-      if(qty >= b.lo){
-        var units = Math.min(qty, b.hi) - b.lo + 1;
-        out.push({band:i+1, units:units, rate:b.rate, jt: units * b.rate * months / 1e6});
-      }
-    }
-    return out;
-  }
   function tierIndexBy(qty, loKey, hiKey){
     for(var i=0;i<TIERS.length;i++){
       if(qty >= TIERS[i][loKey] && qty <= TIERS[i][hiKey]) return i;
     }
-    return 0;
+    return TIERS.length - 1;
   }
   function readInt(el, max){
     var v = parseInt(el.value, 10);
@@ -467,82 +480,66 @@
 
   // ---- engine ----
   function build(){
-    var emp   = readInt($("emp"),  1000000);
-    var hires = readInt($("hire"), 200000);
-    var ats   = $("mAts").checked;
-    var hris  = $("mHris").checked;
-    var d     = parseInt($("disc").value, 10) / 100;
+    var emp      = readInt($("emp"),      1000000);
+    var hires    = readInt($("hire"),     200000);
+    var branches = readInt($("branches"), 500);
+    var d        = parseInt($("disc").value, 10) / 100;
 
-    // modules are per-employee, so they need the workforce meter
-    MODULES.forEach(function(m){
-      var box = $(m.id), lab = box.parentNode;
-      box.disabled = !hris;
-      lab.classList.toggle("off", !hris);
-      if(!hris) box.checked = false;
-    });
-    $("modHint").textContent = hris
-      ? "Core HRIS is already in the workforce fee — these are the modules on top of it."
-      : "Modules are priced per employee. Switch the workforce meter on to sell them.";
-
-    if(!ats && !hris){
+    if(emp > CUSTOM_QUOTE_EMP || hires > CUSTOM_QUOTE_HIRE){
       $("quote").classList.add("hide");
       $("empty").classList.remove("hide");
-      $("tier").textContent = "—";
-      $("setBy").textContent = "no meter running";
+      $("tier").textContent = "Custom";
+      $("setBy").textContent = "outside standard tiers";
       $("rows").innerHTML = "";
-      $("discLabel").textContent = "Discount on platform fee — " + Math.round(d*100) + "% — list price";
       return;
     }
     $("quote").classList.remove("hide");
     $("empty").classList.add("hide");
 
-    // tier = the higher of the two meters, counting only the meters that are on
-    var iEmp = hris ? tierIndexBy(emp,   "empLo",  "empHi")  : -1;
-    var iHire = ats ? tierIndexBy(hires, "hireLo", "hireHi") : -1;
-    var t = TIERS[Math.max(iEmp, iHire)];
+    // Tier is headcount-only — that's what actually tracks HRIS/deployment scope.
+    var tierIdx = tierIndexBy(emp, "empLo", "empHi");
+    var t = TIERS[tierIdx];
 
-    // The minimum contract is a floor on the workforce we carry — the hiring meter already
-    // prices hiring volume. So it follows the HEADCOUNT tier, never the hiring tier.
-    // (This reproduces the V6 price book exactly, and it stops a high-turnover SME from
-    //  being thrown a Rp 400jt minimum it has no business paying.)
-    var minTier = hris ? TIERS[iEmp] : TIERS[0];
-    var minContract = minTier.min;
+    // Full HRIS upgrade only makes sense — and is only offered — on Essential.
+    MODULES.forEach(function(m){
+      var box = $(m.id), lab = box.parentNode;
+      var off = !!m.essentialOnly && tierIdx !== 0;
+      box.disabled = off;
+      lab.classList.toggle("off", off);
+      if(off) box.checked = false;
+    });
 
-    var wf = hris ? slices(emp,   WORKFORCE, 12) : [];
-    var hf = ats  ? slices(hires, HIRING,     1) : [];
-    var wfTotal = wf.reduce(function(s,x){ return s + x.jt; }, 0);
-    var hfTotal = hf.reduce(function(s,x){ return s + x.jt; }, 0);
+    var mods = MODULES.filter(function(m){ return $(m.id).checked; });
+    var modTotal = mods.reduce(function(s,m){ return s + m.annual; }, 0);
 
-    var mods = [];
-    if(hris){
-      MODULES.forEach(function(m){
-        if($(m.id).checked) mods.push({label:m.label, rate:m.rate, jt: emp * m.rate * 12 / 1e6});
-      });
-    }
-    var modTotal = mods.reduce(function(s,x){ return s + x.jt; }, 0);
+    // Hires, admin users, and branches are bundled up to the tier's cap; only the
+    // excess is billed, as a small overage — not a meter from unit one.
+    var extraHires    = Math.max(0, hires    - t.hireHi);
+    var extraBranches = Math.max(0, branches - t.branchesCap);
+    var hireOverage    = extraHires    * HIRE_OVERAGE_RATE;
+    var branchOverage  = extraBranches * BRANCH_OVERAGE_RATE;
+    var overageTotal   = hireOverage + branchOverage;
 
     var discAmt = t.platform * d;
-    var rawList = t.platform + wfTotal + hfTotal + modTotal;   // list, before minimum
-    var listSub = Math.max(rawList, minContract);              // minimum contract holds
-    var topUp   = listSub - rawList;
-    var sub     = Math.max(listSub - discAmt, minContract);    // discount can never break the minimum
-    var applied = listSub - sub;                               // discount that actually lands
-    var blocked = discAmt > applied + 1e-9;
-    var tcv     = sub + t.setup;
-    var floor   = Math.max(listSub - t.platform * MAX_DISCOUNT, minContract);
+    var sub = (t.platform - discAmt) + modTotal + overageTotal;
+    var tcv = sub + t.setup;
+
     var commissionBand = commissionBandByHeadcount(emp);
     var commission = commissionBand ? tcv * commissionBand.rate : null;
 
     // ---- render ----
     $("tier").textContent = t.name;
-    $("setBy").textContent = (ats && hris)
-      ? (iEmp === iHire ? "set by both meters" : (iEmp > iHire ? "set by employees" : "set by hires"))
-      : (hris ? "set by employees" : "set by hires");
+    $("setBy").textContent = "tier set by headcount" + (overageTotal > 0 ? " · overage applies" : "");
 
     $("kSub").textContent   = jt(sub);
     $("kSetup").textContent = jt(t.setup);
     $("kTcv").textContent   = jt(tcv);
-    $("kFloor").textContent = jt(floor);
+
+    $("scCandidates").textContent = t.scope.candidates;
+    $("scHris").textContent       = t.scope.hris;
+    $("scAdmins").textContent     = "Up to " + n0(t.adminsCap);
+    $("scBranches").textContent   = "Up to " + n0(t.branchesCap);
+    $("scSupport").textContent    = t.scope.support;
 
     if(commissionBand){
       $("bdCommissionValue").textContent = jt(commission);
@@ -570,29 +567,20 @@
             + '<td class="calc">' + Math.round(d*100) + '% × ' + jt(t.platform) + '</td>'
             + '<td class="amt r">−' + cell(discAmt) + '</td></tr>';
     }
-    wf.forEach(function(b){
-      html += '<tr><td><span class="comp"><span class="dot b"></span>Workforce fee — band ' + b.band + '</span></td>'
-            + '<td class="calc">' + n0(b.units) + ' emp × Rp ' + n0(b.rate) + ' × 12 mo</td>'
-            + '<td class="amt r">' + cell(b.jt) + '</td></tr>';
-    });
-    hf.forEach(function(b){
-      html += '<tr><td><span class="comp"><span class="dot m"></span>Hiring fee — band ' + b.band + '</span></td>'
-            + '<td class="calc">' + n0(b.units) + ' hires × Rp ' + n0(b.rate) + '</td>'
-            + '<td class="amt r">' + cell(b.jt) + '</td></tr>';
-    });
     mods.forEach(function(m){
-      html += '<tr><td><span class="comp"><span class="dot i"></span>' + m.label + '</span></td>'
-            + '<td class="calc">' + n0(emp) + ' emp × Rp ' + n0(m.rate) + ' × 12 mo</td>'
-            + '<td class="amt r">' + cell(m.jt) + '</td></tr>';
+      html += '<tr><td>' + m.label + '</td>'
+            + '<td class="calc">flat annual fee</td>'
+            + '<td class="amt r">' + cell(m.annual) + '</td></tr>';
     });
-    if(topUp > 0.049 || blocked){
-      var guardAmt = topUp + (blocked ? (discAmt - applied) : 0);
-      var guardTxt = blocked
-        ? 'the discount cannot take the deal below ' + jt(minContract)
-        : 'the deal cannot close below ' + jt(minContract);
-      html += '<tr class="guard"><td>Minimum contract — ' + minTier.name + ' workforce</td>'
-            + '<td class="calc">' + guardTxt + '</td>'
-            + '<td class="amt r">+' + cell(guardAmt) + '</td></tr>';
+    if(extraHires > 0){
+      html += '<tr><td>Hiring overage</td>'
+            + '<td class="calc">' + n0(extraHires) + ' hires beyond ' + n0(t.hireHi) + ' × Rp ' + n0(HIRE_OVERAGE_RATE*1e6) + '</td>'
+            + '<td class="amt r">' + cell(hireOverage) + '</td></tr>';
+    }
+    if(extraBranches > 0){
+      html += '<tr><td>Branch overage</td>'
+            + '<td class="calc">' + n0(extraBranches) + ' beyond ' + n0(t.branchesCap) + ' × Rp ' + n0(BRANCH_OVERAGE_RATE) + 'jt</td>'
+            + '<td class="amt r">' + cell(branchOverage) + '</td></tr>';
     }
     html += '<tr class="total"><td>Annual subscription</td><td class="calc"></td>'
           + '<td class="amt r">' + cell(sub) + '</td></tr>';
@@ -604,7 +592,7 @@
     $("rows").innerHTML = html;
   }
 
-  ["emp","hire","mAts","mHris","aPay","aPms","aLms","disc"].forEach(function(id){
+  ["emp","hire","branches","aHris","aPay","aAtt","aPms","aLms","disc"].forEach(function(id){
     $(id).addEventListener("input", build);
     $(id).addEventListener("change", build);
   });
