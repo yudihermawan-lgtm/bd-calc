@@ -282,6 +282,16 @@
           <img src="aming-official-transparent.png" alt="Aming, Jobseeker’s friendly sales assistant">
           <p><strong>Mulai dari dua angka.</strong> Masukkan jumlah karyawan dan kebutuhan rekrutmen tahunan untuk membangun referensi penawaran.</p>
         </aside>
+        <div class="sect">Deal type</div>
+        <div class="view-switch" role="group" aria-label="Deal type">
+          <button type="button" id="dealNew" class="view-option is-active" aria-pressed="true">New client</button>
+          <button type="button" id="dealExtension" class="view-option" aria-pressed="false">Extension</button>
+        </div>
+        <label class="opt hide" id="lNewScope"><input type="checkbox" id="newScope"><span>Includes new scope / major integration / migration</span></label>
+        <p class="hint" id="dealHint">New clients pay the one-time setup fee. Extensions renew at the platform fee only.</p>
+
+        <hr class="rule">
+
         <div class="flabel">Employees managed</div>
         <input class="num" id="emp" type="number" min="0" max="1000000" step="1" value="1200" inputmode="numeric" aria-label="Employees managed">
         <p class="hint">Employee commitments keep the quote aligned with the client&rsquo;s expected workforce usage.</p>
@@ -298,6 +308,13 @@
 
         <hr class="rule">
 
+        <div class="sect">Products</div>
+        <label class="opt ats"><input type="checkbox" id="mAts" checked><span>Recruitment (ATS)</span></label>
+        <label class="opt hris"><input type="checkbox" id="mHris" checked><span>Workforce (HRIS)</span></label>
+        <p class="hint" id="atsHrisHint">Both included in the platform fee. Choosing only one drops the platform fee to 70% of list price.</p>
+
+        <hr class="rule">
+
         <div class="sect">Add-on modules</div>
         <label class="opt mod" id="lHris"><input type="checkbox" id="aHris"><span>Full HRIS upgrade — Rp 35jt/yr</span></label>
         <label class="opt mod" id="lPay"><input type="checkbox" id="aPay"><span>Payroll — Rp 45jt/yr</span></label>
@@ -310,7 +327,7 @@
 
         <div class="flabel" id="discLabel">Discount on platform fee — 0% — list price</div>
         <input type="range" id="disc" min="0" max="15" step="1" value="0" aria-label="Discount on platform fee, percent">
-        <p class="hint">Discounts apply only to the platform fee and are capped at 15%. Setup and add-on pricing are never discounted.</p>
+        <p class="hint">Discounts apply only to the platform fee and are capped at 15%. Platform fee never drops below Rp110jt combined with any other reduction. Setup and add-on pricing are never discounted.</p>
       </div>
 
       <!-- RIGHT -->
@@ -370,8 +387,13 @@
         </div>
 
         <div class="empty hide" id="empty">
-          <b>This deal needs a custom quote.</b>
-          Headcount or annual hires is beyond the standard tiers — route to Finance/CEO for custom pricing (Add-ons &amp; Overage, on-premise rules apply).
+          <b id="emptyTitle"></b>
+          <span id="emptyBody"></span>
+        </div>
+
+        <div class="empty hide" id="provisionalNote">
+          <b>Provisional price — confirm with Finance before quoting.</b>
+          <span>Beyond 10,000 employees, the platform fee auto-extrapolates in Rp175jt steps per additional 7,500 employees. Beyond 3,000 hires, the hire-overage rate keeps applying past where it was ever calibrated. Neither has real cost data behind it at this scale — treat the number as a conversation anchor, not a final one.</span>
         </div>
 
         <p class="rules">
@@ -439,10 +461,39 @@
   var HIRE_OVERAGE_RATE    = 0.015; // ~Rp15,000 / extra hire beyond the tier's cap
   var BRANCH_OVERAGE_RATE  = 1;     // Rp1jt / extra branch / year
 
-  // Beyond these, the deal is outside every approved tier — the price book requires a
-  // custom quote (CEO + Tech + Finance approval), not an extrapolated standard price.
-  var CUSTOM_QUOTE_EMP  = 10000;
-  var CUSTOM_QUOTE_HIRE = 3000;
+  // Choosing only one of ATS/HRIS drops the platform fee to this fraction of the full
+  // (bundled) list price. Not sourced from the approved book — both products are always
+  // "Included" there — this is a new configuration, priced per explicit instruction.
+  var SOLO_PRODUCT_RATE = 0.70;
+
+  // Beyond 10,000 employees there's no approved cost data at all, so instead of a dead
+  // end this steps the platform fee up in the same increment as the Growth->Enterprise
+  // jump (+175jt) per additional 7,500 employees, flagged provisional (needs sign-off
+  // before quoting) — a conversation anchor, not a firm price. Tier name stays plain
+  // "Enterprise"; the provisional note is the signal, not a separate tier name.
+  var VERY_HIGH_EMP     = 10000;
+  var VERY_HIGH_STEP_EMP = 7500;
+  var VERY_HIGH_STEP_FEE = 175;
+
+  // No dead end on hires either — the tier stays whatever headcount already set, and the
+  // existing linear hire-overage rate just keeps applying past this point. Same provisional
+  // flag as the employee case: that overage rate was calibrated for modest excess, not this
+  // far out, so it's an anchor, not a firm price.
+  var HIGH_HIRE_FLAG = 3000;
+
+  // Platform fee (after discount + solo-product reduction) never drops below this, flat
+  // across every tier — explicit instruction. Understood effect: this equals Essential's
+  // own full platform fee, so it fully freezes Essential (no discount or solo-product
+  // reduction can ever lower it); for Growth it only catches the solo+max-discount combo;
+  // for Enterprise it never binds. If the floor ever shows up in the breakdown, it's the
+  // "Platform fee floor" row.
+  var PLATFORM_FLOOR = 110;
+
+  // Extension (renewal) deals drop the setup fee per the approved book's Y2 rule, unless
+  // new scope/major integration/migration brings it back (the book's own carve-out).
+  // Commission on Extension deals is a flat, explicit rate — not the 6/7/8% new-business
+  // bands — since the approved book never resolved whether renewals earn commission at all.
+  var RENEWAL_COMMISSION_RATE = 0.02;
 
   // ---- helpers ----
   var $ = function(id){ return document.getElementById(id); };
@@ -465,7 +516,23 @@
     $("bdCommissionPanel").setAttribute("aria-hidden", String(!isBd));
   }
 
+  var dealType = "new";
+  function setDealType(type){
+    dealType = type === "extension" ? "extension" : "new";
+    var isExtension = dealType === "extension";
+    $("dealNew").classList.toggle("is-active", !isExtension);
+    $("dealExtension").classList.toggle("is-active", isExtension);
+    $("dealNew").setAttribute("aria-pressed", String(!isExtension));
+    $("dealExtension").setAttribute("aria-pressed", String(isExtension));
+    $("lNewScope").classList.toggle("hide", !isExtension);
+    if(!isExtension) $("newScope").checked = false;
+    build();
+  }
+
   function tierIndexBy(qty, loKey, hiKey){
+    // Below the smallest tier's range (e.g. 0 or a blank field) must fall to Essential,
+    // not fall through to the "beyond every range" branch, which means the largest tier.
+    if(qty < TIERS[0][loKey]) return 0;
     for(var i=0;i<TIERS.length;i++){
       if(qty >= TIERS[i][loKey] && qty <= TIERS[i][hiKey]) return i;
     }
@@ -478,32 +545,60 @@
     return v;
   }
 
+  function showBlock(title, body){
+    $("quote").classList.add("hide");
+    $("provisionalNote").classList.add("hide");
+    $("empty").classList.remove("hide");
+    $("emptyTitle").textContent = title;
+    $("emptyBody").textContent = body;
+    $("tier").textContent = "—";
+    $("setBy").textContent = "no quote";
+    $("rows").innerHTML = "";
+  }
+
   // ---- engine ----
   function build(){
     var emp      = readInt($("emp"),      1000000);
     var hires    = readInt($("hire"),     200000);
     var branches = readInt($("branches"), 500);
-    var d        = parseInt($("disc").value, 10) / 100;
+    var ats      = $("mAts").checked;
+    var hris     = $("mHris").checked;
+    var d        = Math.min(parseInt($("disc").value, 10) / 100, MAX_DISCOUNT);
+    var isExtension = dealType === "extension";
+    var newScope     = isExtension && $("newScope").checked;
+    var chargeSetup  = !isExtension || newScope;
 
-    if(emp > CUSTOM_QUOTE_EMP || hires > CUSTOM_QUOTE_HIRE){
-      $("quote").classList.add("hide");
-      $("empty").classList.remove("hide");
-      $("tier").textContent = "Custom";
-      $("setBy").textContent = "outside standard tiers";
-      $("rows").innerHTML = "";
+    if(!ats && !hris){
+      showBlock("Pick at least one product.", "A client needs Recruitment (ATS), Workforce (HRIS), or both — there's nothing to price without either.");
       return;
     }
+
+    var isVeryHigh = emp > VERY_HIGH_EMP;
+    // Tier is headcount-only — that's what actually tracks HRIS/deployment scope.
+    var tierIdx = isVeryHigh ? (TIERS.length - 1) : tierIndexBy(emp, "empLo", "empHi");
+    var baseTier = TIERS[tierIdx];
+    var t = baseTier;
+    if(isVeryHigh){
+      // No approved cost data past Enterprise's range — step the platform fee up using
+      // the same increment as the Growth->Enterprise jump. Provisional; needs sign-off.
+      // Stays labeled "Enterprise" (no separate tier name) — the provisional note is the
+      // signal that this number is extrapolated, not the tier headline.
+      var steps = Math.ceil((emp - VERY_HIGH_EMP) / VERY_HIGH_STEP_EMP);
+      t = Object.assign({}, baseTier, {
+        platform: baseTier.platform + steps * VERY_HIGH_STEP_FEE
+      });
+    }
+    var isProvisional = isVeryHigh || hires > HIGH_HIRE_FLAG;
+
     $("quote").classList.remove("hide");
     $("empty").classList.add("hide");
+    $("provisionalNote").classList.toggle("hide", !isProvisional);
 
-    // Tier is headcount-only — that's what actually tracks HRIS/deployment scope.
-    var tierIdx = tierIndexBy(emp, "empLo", "empHi");
-    var t = TIERS[tierIdx];
-
-    // Full HRIS upgrade only makes sense — and is only offered — on Essential.
+    // Modules are all HRIS-side add-ons — no HRIS, nothing to sell on top of it.
+    // Full HRIS upgrade is additionally Essential-only.
     MODULES.forEach(function(m){
       var box = $(m.id), lab = box.parentNode;
-      var off = !!m.essentialOnly && tierIdx !== 0;
+      var off = !hris || (!!m.essentialOnly && tierIdx !== 0);
       box.disabled = off;
       lab.classList.toggle("off", off);
       if(off) box.checked = false;
@@ -512,41 +607,56 @@
     var mods = MODULES.filter(function(m){ return $(m.id).checked; });
     var modTotal = mods.reduce(function(s,m){ return s + m.annual; }, 0);
 
-    // Hires, admin users, and branches are bundled up to the tier's cap; only the
-    // excess is billed, as a small overage — not a meter from unit one.
+    $("modHint").textContent = !hris
+      ? "Switch on Workforce (HRIS) to sell these modules — they're all HRIS-side add-ons."
+      : "Flat annual add-ons on top of the platform fee. Full HRIS upgrade is Essential-only — Growth and Enterprise already include full HRIS.";
+
+    // Choosing only one of ATS/HRIS drops the platform fee to SOLO_PRODUCT_RATE of list —
+    // a new configuration, not in the approved book (both are always "Included" there).
+    var soloProduct = ats !== hris;
+    var listPlatform = t.platform * (soloProduct ? SOLO_PRODUCT_RATE : 1);
+
+    // Hires and branches are bundled up to the tier's cap; only the excess is billed,
+    // as a small overage — not a meter from unit one.
     var extraHires    = Math.max(0, hires    - t.hireHi);
     var extraBranches = Math.max(0, branches - t.branchesCap);
     var hireOverage    = extraHires    * HIRE_OVERAGE_RATE;
     var branchOverage  = extraBranches * BRANCH_OVERAGE_RATE;
     var overageTotal   = hireOverage + branchOverage;
 
-    var discAmt = t.platform * d;
-    var sub = (t.platform - discAmt) + modTotal + overageTotal;
-    var tcv = sub + t.setup;
+    var discAmt = listPlatform * d;
+    var netPlatformRaw = listPlatform - discAmt;
+    var netPlatform = Math.max(netPlatformRaw, PLATFORM_FLOOR);
+    var floorTopUp = netPlatform - netPlatformRaw;
+
+    var setupFee = chargeSetup ? t.setup : 0;
+    var sub = netPlatform + modTotal + overageTotal;
+    var tcv = sub + setupFee;
 
     var commissionBand = commissionBandByHeadcount(emp);
-    var commission = commissionBand ? tcv * commissionBand.rate : null;
+    var effectiveRate = commissionBand ? (isExtension ? RENEWAL_COMMISSION_RATE : commissionBand.rate) : null;
+    var commission = effectiveRate != null ? tcv * effectiveRate : null;
 
     // ---- render ----
     $("tier").textContent = t.name;
     $("setBy").textContent = "tier set by headcount" + (overageTotal > 0 ? " · overage applies" : "");
 
     $("kSub").textContent   = jt(sub);
-    $("kSetup").textContent = jt(t.setup);
+    $("kSetup").textContent = jt(setupFee);
     $("kTcv").textContent   = jt(tcv);
 
     $("scCandidates").textContent = t.scope.candidates;
-    $("scHris").textContent       = t.scope.hris;
+    $("scHris").textContent       = hris ? t.scope.hris : "Not selected";
     $("scAdmins").textContent     = "Up to " + n0(t.adminsCap);
     $("scBranches").textContent   = "Up to " + n0(t.branchesCap);
     $("scSupport").textContent    = t.scope.support;
 
     if(commissionBand){
       $("bdCommissionValue").textContent = jt(commission);
-      $("bdCommissionRate").textContent = Math.round(commissionBand.rate * 100) + "%";
+      $("bdCommissionRate").textContent = Math.round(effectiveRate * 100) + "%" + (isExtension ? " (renewal rate)" : "");
       $("bdCommissionBand").textContent = commissionBand.name + " · " + n0(commissionBand.lo) + (commissionBand.hi === INF ? "+ employees" : "–" + n0(commissionBand.hi) + " employees");
       $("bdCommissionBasis").textContent = jt(tcv);
-      $("bdCommissionMessage").textContent = "Quote tier: " + t.name + " · Commission band: " + commissionBand.name;
+      $("bdCommissionMessage").textContent = "Quote tier: " + t.name + " · Commission band: " + commissionBand.name + (isExtension ? " · Extension (flat renewal rate)" : "");
     }else{
       $("bdCommissionValue").textContent = "—";
       $("bdCommissionRate").textContent = "—";
@@ -559,13 +669,19 @@
       + (d === 0 ? "list price" : "−" + jt(discAmt).replace("Rp ",""));
 
     var html = "";
-    html += '<tr><td class="lead">Platform fee — ' + t.name + '</td>'
-          + '<td class="calc">list price</td><td class="amt r">' + cell(t.platform) + '</td></tr>';
+    html += '<tr><td class="lead">Platform fee — ' + t.name + (soloProduct ? ' (' + (ats ? 'ATS only' : 'HRIS only') + ')' : '') + '</td>'
+          + '<td class="calc">' + (soloProduct ? Math.round(SOLO_PRODUCT_RATE*100) + '% of list — single product' : 'list price') + '</td>'
+          + '<td class="amt r">' + cell(listPlatform) + '</td></tr>';
 
     if(d > 0){
       html += '<tr class="neg"><td>Discount on platform fee</td>'
-            + '<td class="calc">' + Math.round(d*100) + '% × ' + jt(t.platform) + '</td>'
+            + '<td class="calc">' + Math.round(d*100) + '% × ' + jt(listPlatform) + '</td>'
             + '<td class="amt r">−' + cell(discAmt) + '</td></tr>';
+    }
+    if(floorTopUp > 0.049){
+      html += '<tr class="guard"><td>Platform fee floor</td>'
+            + '<td class="calc">discount + solo-product cannot take platform fee below ' + jt(PLATFORM_FLOOR) + '</td>'
+            + '<td class="amt r">+' + cell(floorTopUp) + '</td></tr>';
     }
     mods.forEach(function(m){
       html += '<tr><td>' + m.label + '</td>'
@@ -584,18 +700,20 @@
     }
     html += '<tr class="total"><td>Annual subscription</td><td class="calc"></td>'
           + '<td class="amt r">' + cell(sub) + '</td></tr>';
-    html += '<tr><td>Setup fee — one-time, never waived</td>'
-          + '<td class="calc">' + t.name + '</td><td class="amt r">' + cell(t.setup) + '</td></tr>';
-    html += '<tr class="total"><td>Year-1 total contract value</td>'
+    html += '<tr><td>Setup fee' + (chargeSetup ? ' — one-time, never waived' : ' — waived (extension, no new scope)') + '</td>'
+          + '<td class="calc">' + t.name + '</td><td class="amt r">' + cell(setupFee) + '</td></tr>';
+    html += '<tr class="total"><td>' + (isExtension ? 'Renewal total contract value' : 'Year-1 total contract value') + '</td>'
           + '<td class="calc">subscription + setup</td><td class="amt r">' + cell(tcv) + '</td></tr>';
 
     $("rows").innerHTML = html;
   }
 
-  ["emp","hire","branches","aHris","aPay","aAtt","aPms","aLms","disc"].forEach(function(id){
+  ["emp","hire","branches","mAts","mHris","aHris","aPay","aAtt","aPms","aLms","disc","newScope"].forEach(function(id){
     $(id).addEventListener("input", build);
     $(id).addEventListener("change", build);
   });
+  $("dealNew").addEventListener("click", function(){ setDealType("new"); });
+  $("dealExtension").addEventListener("click", function(){ setDealType("extension"); });
   $("viewClient").addEventListener("click", function(){ setCalculatorView("client"); });
   $("returnClientView").addEventListener("click", function(){ setCalculatorView("client"); });
   $("viewBd").addEventListener("click", function(){ setCalculatorView("bd"); });

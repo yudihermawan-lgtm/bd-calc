@@ -83,13 +83,15 @@ assert.match(guide, /\.package-price\{font-size:clamp\(var\(--font-price-mobile\
 assert.match(guide, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "Guide must declare a self-contained favicon");
 assert.match(index, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "Calculator must declare a self-contained favicon");
 
-assert.equal((guide.match(/class="comparison-row"/g) || []).length, 14);
+assert.equal((guide.match(/class="comparison-row"/g) || []).length, 6, "Comparison table consolidated from 14 rows to 6 — no redundant ATS row, no unquantifiable escalating-adjective rows (Configuration & AI cut entirely, Service trimmed to only its concrete parts)");
 assert.equal((guide.match(/class="addon-item"/g) || []).length, 14);
 assert.equal((guide.match(/class="overage-item"/g) || []).length, 7);
 assert.equal((guide.match(/class="payment-item"/g) || []).length, 9);
 assert.equal((guide.match(/class="scope-note"/g) || []).length, 4);
 
-for (const disclosure of ["comparisonDetails", "addonDetails", "paymentDetails"]) {
+// Comparison table is short enough (7 rows) to show directly — no disclosure/toggle needed.
+assert.doesNotMatch(guide, /id=["']comparisonDetails["']/, "Comparison table must not be hidden behind a disclosure again");
+for (const disclosure of ["addonDetails", "paymentDetails"]) {
   assert.match(guide, new RegExp(`id=["']${disclosure}["']`));
 }
 
@@ -125,13 +127,18 @@ const calculatorPresentationForbidden = [
 ];
 for (const pattern of calculatorPresentationForbidden) assert.doesNotMatch(index, pattern);
 
-for (const engineToken of ["var TIERS", "var MODULES", "var MAX_DISCOUNT = 0.15", "var CUSTOM_QUOTE_EMP", "var CUSTOM_QUOTE_HIRE", "function build()"] ) {
+for (const engineToken of ["var TIERS", "var MODULES", "var MAX_DISCOUNT = 0.15", "var VERY_HIGH_EMP", "var HIGH_HIRE_FLAG", "function build()"] ) {
   assert.ok(index.includes(engineToken), `Calculator engine token changed or missing: ${engineToken}`);
 }
 // Flat-tier engine (approved V6 book): no per-employee/per-hire marginal meters.
 for (const removedToken of ["var WORKFORCE", "var HIRING", "function slices("]) {
   assert.ok(!index.includes(removedToken), `Calculator engine must not reintroduce marginal usage meter: ${removedToken}`);
 }
+// No dead-end "Custom quote" tier — every input resolves to Essential/Growth/Enterprise.
+assert.doesNotMatch(index, /needs a custom quote/i, "Calculator must not reintroduce the dead-end Custom tier");
+// Very-high-headcount deals stay labeled plain "Enterprise" — no separate tier name;
+// the provisional note is the only signal that the price is extrapolated.
+assert.doesNotMatch(index, /Enterprise\+/, "Very-high tier must not reintroduce a distinct \"Enterprise+\" name");
 
 assert.match(index, /id="viewClient"[^>]*aria-pressed="true"/);
 assert.match(index, /id="viewBd"[^>]*aria-pressed="false"/);
