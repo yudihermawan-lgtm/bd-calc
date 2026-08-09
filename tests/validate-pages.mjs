@@ -66,8 +66,8 @@ assert.match(guide, /id="priceYear1"[^>]*aria-pressed="true"/);
 assert.match(guide, /id="priceRenewal"[^>]*aria-pressed="false"/);
 assert.match(guide, /function setPriceContext\s*\(/);
 assert.match(guide, /data-year1="Rp135 juta"[^>]*data-renewal="Rp110 juta"/);
-assert.match(guide, /data-year1="Rp225 juta"[^>]*data-renewal="Rp175 juta"/);
-assert.match(guide, /data-year1="Rp450 juta"[^>]*data-renewal="Rp350 juta"/);
+assert.match(guide, /data-year1="Rp265 juta"[^>]*data-renewal="Rp215 juta"/, "Growth Y1/renewal reflects the platform fee raised to fund free Payroll+Attendance bundling with HRIS");
+assert.match(guide, /data-year1="Rp490 juta"[^>]*data-renewal="Rp390 juta"/, "Enterprise Y1/renewal reflects the platform fee raised to fund free Payroll+Attendance bundling with HRIS");
 
 assert.match(guide, /--font-body:\s*16px/);
 assert.match(guide, /--font-support:\s*14px/);
@@ -83,8 +83,8 @@ assert.match(guide, /\.package-price\{font-size:clamp\(var\(--font-price-mobile\
 assert.match(guide, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "Guide must declare a self-contained favicon");
 assert.match(index, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "Calculator must declare a self-contained favicon");
 
-assert.equal((guide.match(/class="comparison-row"/g) || []).length, 6, "Comparison table consolidated from 14 rows to 6 — no redundant ATS row, no unquantifiable escalating-adjective rows (Configuration & AI cut entirely, Service trimmed to only its concrete parts)");
-assert.equal((guide.match(/class="addon-item"/g) || []).length, 14);
+assert.equal((guide.match(/class="comparison-row"/g) || []).length, 5, "Comparison table now 5 rows — HRIS row removed (reflected live via the calculator's product toggle instead), candidate-processing replaced with headcount/hire ranges, admin-users row removed");
+assert.equal((guide.match(/class="addon-item"/g) || []).length, 15, "Added Multi-entity as a per-instance, AM-mediated add-on (not a flat included count, per the tech team's own tenant-provisioning and pricing guidance)");
 assert.equal((guide.match(/class="overage-item"/g) || []).length, 7);
 assert.equal((guide.match(/class="payment-item"/g) || []).length, 9);
 assert.equal((guide.match(/class="scope-note"/g) || []).length, 4);
@@ -95,8 +95,8 @@ for (const disclosure of ["addonDetails", "paymentDetails"]) {
   assert.match(guide, new RegExp(`id=["']${disclosure}["']`));
 }
 
-for (const price of ["Rp110 juta", "Rp25 juta", "Rp135 juta", "Rp175 juta", "Rp50 juta", "Rp225 juta", "Rp350 juta", "Rp100 juta", "Rp450 juta"]) {
-  assert.ok(guide.includes(price), `Missing public workbook price: ${price}`);
+for (const price of ["Rp110 juta", "Rp25 juta", "Rp135 juta", "Rp215 juta", "Rp50 juta", "Rp265 juta", "Rp390 juta", "Rp100 juta", "Rp490 juta"]) {
+  assert.ok(guide.includes(price), `Missing tier price: ${price}`);
 }
 
 for (const required of ["Essential", "Growth", "Enterprise", "ATS", "HRIS", "PMS", "LMS", "PPh 23", "Net-30", "Net-60"]) {

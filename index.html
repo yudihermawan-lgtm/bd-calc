@@ -311,23 +311,23 @@
         <div class="sect">Products</div>
         <label class="opt ats"><input type="checkbox" id="mAts" checked><span>Recruitment (ATS)</span></label>
         <label class="opt hris"><input type="checkbox" id="mHris" checked><span>Workforce (HRIS)</span></label>
-        <p class="hint" id="atsHrisHint">Both included in the platform fee. Choosing only one drops the platform fee to 70% of list price.</p>
+        <p class="hint" id="atsHrisHint">Both included in the platform fee. ATS only is 80% of list price; HRIS only is 65% — each tier's own minimum-margin floor still applies.</p>
 
         <hr class="rule">
 
         <div class="sect">Add-on modules</div>
-        <label class="opt mod" id="lHris"><input type="checkbox" id="aHris"><span>Full HRIS upgrade — Rp 35jt/yr</span></label>
-        <label class="opt mod" id="lPay"><input type="checkbox" id="aPay"><span>Payroll — Rp 45jt/yr</span></label>
-        <label class="opt mod" id="lAtt"><input type="checkbox" id="aAtt"><span>Attendance — Rp 30jt/yr</span></label>
-        <label class="opt mod" id="lPms"><input type="checkbox" id="aPms"><span>PMS — Rp 30jt/yr</span></label>
-        <label class="opt mod" id="lLms"><input type="checkbox" id="aLms"><span>LMS — Rp 30jt/yr</span></label>
-        <p class="hint" id="modHint">Flat annual add-ons on top of the platform fee. Full HRIS upgrade is Essential-only — Growth and Enterprise already include full HRIS.</p>
+        <label class="opt mod" id="lHris"><input type="checkbox" id="aHris"><span>Full HRIS upgrade — <span id="aHrisPrice">Rp 90jt/yr</span></span></label>
+        <label class="opt mod" id="lPay"><input type="checkbox" id="aPay"><span>Payroll — <span id="aPayPrice">Rp 45jt/yr</span></span></label>
+        <label class="opt mod" id="lAtt"><input type="checkbox" id="aAtt"><span>Attendance — <span id="aAttPrice">Rp 30jt/yr</span></span></label>
+        <label class="opt mod" id="lPms"><input type="checkbox" id="aPms"><span>PMS — Launching soon</span></label>
+        <label class="opt mod" id="lLms"><input type="checkbox" id="aLms"><span>LMS — Launching soon</span></label>
+        <p class="hint" id="modHint">Payroll and Attendance are included free once HRIS is fully active. Full HRIS upgrade is Essential-only — Growth and Enterprise already include full HRIS.</p>
 
         <hr class="rule">
 
         <div class="flabel" id="discLabel">Discount on platform fee — 0% — list price</div>
         <input type="range" id="disc" min="0" max="15" step="1" value="0" aria-label="Discount on platform fee, percent">
-        <p class="hint">Discounts apply only to the platform fee and are capped at 15%. Platform fee never drops below Rp110jt combined with any other reduction. Setup and add-on pricing are never discounted.</p>
+        <p class="hint">Discounts apply only to the platform fee and are capped at 15%. Platform fee never drops below that tier's own minimum-margin floor, combined with any other reduction. Setup and add-on pricing are never discounted.</p>
       </div>
 
       <!-- RIGHT -->
@@ -416,15 +416,29 @@
   // HRIS/deployment scope (admin users, branches, support level). Annual hires, admin
   // users, and branches are bundled up to each tier's cap; beyond the cap they add a
   // small overage (Add-ons & Overage tab), never a full extra tier.
+  // Each tier's `floor` is a minimum-margin platform-fee guardrail, not an arbitrary
+  // number — it's the platform fee below which that tier's own fixed costs (BD
+  // acquisition, CS, IT allocation) push margin under ~20%. Full derivation is in the
+  // internal margin memo (founder/leadership only).
+  //
+  // Growth/Enterprise platform fees and floors were revised upward from the original
+  // approved book (175/145 -> 215/200, 350/220 -> 390/275) because HRIS now bundles
+  // Payroll and Attendance for free (see MODULES below) instead of selling them
+  // separately — those two are the highest cost-rated features in the engineering
+  // feature-mapping doc. The increase assumes ~50% expected usage of the bundled
+  // Rp75jt/year combined value (Rp37.5jt/year added cost exposure per HRIS client) with
+  // a small buffer; this is a stated assumption, not measured usage — revisit once
+  // real Payroll/Attendance utilization data exists. Essential is unaffected because its
+  // default "Basic/limited" HRIS does not bundle them (see Full HRIS upgrade below).
   var TIERS = [
     {name:"Essential", empLo:1,    empHi:500,   hireHi:150,  adminsCap:3,  branchesCap:3,
-     platform:110, setup:25,
+     platform:110, setup:25, floor:110,
      scope:{candidates:"Up to 1,500 / month", hris:"Basic / limited", support:"Ticket / email"}},
     {name:"Growth",     empLo:501, empHi:2000,  hireHi:600,  adminsCap:10, branchesCap:10,
-     platform:175, setup:50,
+     platform:215, setup:50, floor:200,
      scope:{candidates:"Up to 5,000 / month", hris:"Included", support:"WhatsApp priority, working hours"}},
     {name:"Enterprise", empLo:2001,empHi:10000, hireHi:3000, adminsCap:50, branchesCap:100,
-     platform:350, setup:100,
+     platform:390, setup:100, floor:275,
      scope:{candidates:"Up to 20,000 / month", hris:"Included", support:"Dedicated AM, working-hours SLA"}}
   ];
   var COMMISSION_BANDS = [
@@ -442,12 +456,17 @@
   }
 
   // Flat annual add-ons (source: Add-ons & Overage tab) — not metered per employee.
+  // Payroll and Attendance (bundlesFree) are included at no extra charge whenever HRIS
+  // is on — Growth/Enterprise always (HRIS is "Included" there), Essential only after
+  // the Full HRIS upgrade. With ATS only (no HRIS), they're still purchasable standalone
+  // at their listed price — a client can get "ATS + Payroll only" without buying HRIS.
+  // PMS/LMS (comingSoon) aren't launched yet — shown but not sellable, no price.
   var MODULES = [
-    {id:"aHris", label:"Full HRIS upgrade", annual:35, essentialOnly:true},
-    {id:"aPay",  label:"Payroll",           annual:45},
-    {id:"aAtt",  label:"Attendance",        annual:30},
-    {id:"aPms",  label:"PMS",               annual:30},
-    {id:"aLms",  label:"LMS",               annual:30}
+    {id:"aHris", label:"Full HRIS upgrade", annual:90, essentialOnly:true},
+    {id:"aPay",  label:"Payroll",           annual:45, bundlesFree:true},
+    {id:"aAtt",  label:"Attendance",        annual:30, bundlesFree:true},
+    {id:"aPms",  label:"PMS",               annual:30, comingSoon:true},
+    {id:"aLms",  label:"LMS",               annual:30, comingSoon:true}
   ];
   var MAX_DISCOUNT = 0.15;
 
@@ -461,10 +480,15 @@
   var HIRE_OVERAGE_RATE    = 0.015; // ~Rp15,000 / extra hire beyond the tier's cap
   var BRANCH_OVERAGE_RATE  = 1;     // Rp1jt / extra branch / year
 
-  // Choosing only one of ATS/HRIS drops the platform fee to this fraction of the full
+  // Choosing only one of ATS/HRIS drops the platform fee to a fraction of the full
   // (bundled) list price. Not sourced from the approved book — both products are always
-  // "Included" there — this is a new configuration, priced per explicit instruction.
-  var SOLO_PRODUCT_RATE = 0.70;
+  // "Included" there — this is a new configuration. ATS is priced above HRIS on a value
+  // basis (ATS is the differentiated, market-winning product; HRIS competes against
+  // mature standalone HRIS vendors) — NOT a cost basis: the engineering feature-mapping
+  // doc rates core ATS and core HRIS at near-identical infra cost score and mandays
+  // (41 vs 42), so this gap should never be justified internally as "ATS costs more."
+  var ATS_SOLO_RATE  = 0.80;
+  var HRIS_SOLO_RATE = 0.65;
 
   // Beyond 10,000 employees there's no approved cost data at all, so instead of a dead
   // end this steps the platform fee up in the same increment as the Growth->Enterprise
@@ -481,13 +505,14 @@
   // far out, so it's an anchor, not a firm price.
   var HIGH_HIRE_FLAG = 3000;
 
-  // Platform fee (after discount + solo-product reduction) never drops below this, flat
-  // across every tier — explicit instruction. Understood effect: this equals Essential's
-  // own full platform fee, so it fully freezes Essential (no discount or solo-product
-  // reduction can ever lower it); for Growth it only catches the solo+max-discount combo;
-  // for Enterprise it never binds. If the floor ever shows up in the breakdown, it's the
-  // "Platform fee floor" row.
-  var PLATFORM_FLOOR = 110;
+  // Platform fee (after discount + solo-product reduction) never drops below that TIER's
+  // own `floor` (see TIERS above) — a per-tier minimum-margin guardrail, not one flat
+  // number. Essential's floor equals its own full price, so it's fully frozen (no
+  // discount or solo-product reduction ever lowers it). Growth's floor sits close to its
+  // full price too — its fixed costs leave almost no room for a solo-product discount to
+  // survive at a sustainable margin, so ATS-only and HRIS-only end up priced the same
+  // there. Only Enterprise has enough margin cushion for the ATS/HRIS rates above to
+  // produce a real price gap. If the floor binds, it shows as the "Platform fee floor" row.
 
   // Extension (renewal) deals drop the setup fee per the approved book's Y2 rule, unless
   // new scope/major integration/migration brings it back (the book's own carve-out).
@@ -594,10 +619,40 @@
     $("empty").classList.add("hide");
     $("provisionalNote").classList.toggle("hide", !isProvisional);
 
-    // Modules are all HRIS-side add-ons — no HRIS, nothing to sell on top of it.
-    // Full HRIS upgrade is additionally Essential-only.
+    // Payroll/Attendance are bundled free once HRIS is fully active (Growth/Enterprise
+    // always; Essential only after the Full HRIS upgrade). Without HRIS at all, they're
+    // still purchasable standalone alongside ATS — see MODULES comment above.
+    var essentialHrisUpgradeChecked = tierIdx === 0 && $("aHris").checked;
+    var hrisBundlesPayrollAttendance = hris && (tierIdx !== 0 || essentialHrisUpgradeChecked);
+
     MODULES.forEach(function(m){
       var box = $(m.id), lab = box.parentNode;
+      var priceEl = $(m.id + "Price");
+      if(m.comingSoon){
+        box.disabled = true;
+        box.checked = false;
+        lab.classList.add("off");
+        return;
+      }
+      if(m.bundlesFree){
+        if(hrisBundlesPayrollAttendance){
+          box.checked = true;
+          box.disabled = true;
+          lab.classList.remove("off");
+          if(priceEl) priceEl.textContent = "Included with HRIS";
+        }else if(hris){
+          // Essential with basic HRIS, upgrade not (yet) bought — not sellable standalone.
+          box.disabled = true;
+          box.checked = false;
+          lab.classList.add("off");
+          if(priceEl) priceEl.textContent = "Rp " + m.annual + "jt/yr";
+        }else{
+          box.disabled = false;
+          lab.classList.remove("off");
+          if(priceEl) priceEl.textContent = "Rp " + m.annual + "jt/yr";
+        }
+        return;
+      }
       var off = !hris || (!!m.essentialOnly && tierIdx !== 0);
       box.disabled = off;
       lab.classList.toggle("off", off);
@@ -605,16 +660,20 @@
     });
 
     var mods = MODULES.filter(function(m){ return $(m.id).checked; });
-    var modTotal = mods.reduce(function(s,m){ return s + m.annual; }, 0);
+    var modTotal = mods.reduce(function(s,m){
+      var free = m.bundlesFree && hrisBundlesPayrollAttendance;
+      return s + (free ? 0 : m.annual);
+    }, 0);
 
     $("modHint").textContent = !hris
-      ? "Switch on Workforce (HRIS) to sell these modules — they're all HRIS-side add-ons."
-      : "Flat annual add-ons on top of the platform fee. Full HRIS upgrade is Essential-only — Growth and Enterprise already include full HRIS.";
+      ? "Switch on Workforce (HRIS) to sell Full HRIS upgrade, PMS, or LMS. Payroll and Attendance can still be sold standalone with ATS only."
+      : "Payroll and Attendance are included free once HRIS is fully active. Full HRIS upgrade is Essential-only — Growth and Enterprise already include full HRIS.";
 
-    // Choosing only one of ATS/HRIS drops the platform fee to SOLO_PRODUCT_RATE of list —
+    // Choosing only one of ATS/HRIS drops the platform fee to that product's solo rate —
     // a new configuration, not in the approved book (both are always "Included" there).
     var soloProduct = ats !== hris;
-    var listPlatform = t.platform * (soloProduct ? SOLO_PRODUCT_RATE : 1);
+    var soloRate = ats ? ATS_SOLO_RATE : HRIS_SOLO_RATE;
+    var listPlatform = t.platform * (soloProduct ? soloRate : 1);
 
     // Hires and branches are bundled up to the tier's cap; only the excess is billed,
     // as a small overage — not a meter from unit one.
@@ -626,7 +685,7 @@
 
     var discAmt = listPlatform * d;
     var netPlatformRaw = listPlatform - discAmt;
-    var netPlatform = Math.max(netPlatformRaw, PLATFORM_FLOOR);
+    var netPlatform = Math.max(netPlatformRaw, t.floor);
     var floorTopUp = netPlatform - netPlatformRaw;
 
     var setupFee = chargeSetup ? t.setup : 0;
@@ -670,7 +729,7 @@
 
     var html = "";
     html += '<tr><td class="lead">Platform fee — ' + t.name + (soloProduct ? ' (' + (ats ? 'ATS only' : 'HRIS only') + ')' : '') + '</td>'
-          + '<td class="calc">' + (soloProduct ? Math.round(SOLO_PRODUCT_RATE*100) + '% of list — single product' : 'list price') + '</td>'
+          + '<td class="calc">' + (soloProduct ? Math.round(soloRate*100) + '% of list — single product' : 'list price') + '</td>'
           + '<td class="amt r">' + cell(listPlatform) + '</td></tr>';
 
     if(d > 0){
@@ -680,13 +739,14 @@
     }
     if(floorTopUp > 0.049){
       html += '<tr class="guard"><td>Platform fee floor</td>'
-            + '<td class="calc">discount + solo-product cannot take platform fee below ' + jt(PLATFORM_FLOOR) + '</td>'
+            + '<td class="calc">discount + solo-product cannot take platform fee below ' + jt(t.floor) + '</td>'
             + '<td class="amt r">+' + cell(floorTopUp) + '</td></tr>';
     }
     mods.forEach(function(m){
-      html += '<tr><td>' + m.label + '</td>'
-            + '<td class="calc">flat annual fee</td>'
-            + '<td class="amt r">' + cell(m.annual) + '</td></tr>';
+      var free = m.bundlesFree && hrisBundlesPayrollAttendance;
+      html += '<tr><td>' + m.label + (free ? ' <span class="calc">(included with HRIS)</span>' : '') + '</td>'
+            + '<td class="calc">' + (free ? '—' : 'flat annual fee') + '</td>'
+            + '<td class="amt r">' + (free ? '0.0' : cell(m.annual)) + '</td></tr>';
     });
     if(extraHires > 0){
       html += '<tr><td>Hiring overage</td>'
