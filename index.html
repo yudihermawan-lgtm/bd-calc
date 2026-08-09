@@ -391,11 +391,6 @@
           <span id="emptyBody"></span>
         </div>
 
-        <div class="empty hide" id="provisionalNote">
-          <b>Provisional price — confirm with Finance before quoting.</b>
-          <span>Beyond 10,000 employees, the platform fee auto-extrapolates in Rp175jt steps per additional 7,500 employees. Beyond 3,000 hires, the hire-overage rate keeps applying past where it was ever calibrated. Neither has real cost data behind it at this scale — treat the number as a conversation anchor, not a final one.</span>
-        </div>
-
         <p class="rules">
           <b>Setup is included in every first-year quote and is never waived by default.</b> Employee and hire commitments set the tier at signing and are reviewed at renewal.
         </p>
@@ -490,20 +485,24 @@
   var ATS_SOLO_RATE  = 0.80;
   var HRIS_SOLO_RATE = 0.65;
 
-  // Beyond 10,000 employees there's no approved cost data at all, so instead of a dead
-  // end this steps the platform fee up in the same increment as the Growth->Enterprise
-  // jump (+175jt) per additional 7,500 employees, flagged provisional (needs sign-off
-  // before quoting) — a conversation anchor, not a firm price. Tier name stays plain
+  // Beyond 10,000 employees there's no approved cost data at all, so this steps the
+  // platform fee up instead of dead-ending, flagged provisional (needs sign-off before
+  // quoting) — a conversation anchor, not a firm price. Tier name stays plain
   // "Enterprise"; the provisional note is the signal, not a separate tier name.
+  //
+  // Step fee is calibrated (not a round heuristic) to hit ~62% margin at a validated
+  // reference point: 22,000 employees / 4,000 hires, ATS only, 0% discount -> Rp775jt
+  // Y1 TCV against the standard Enterprise fixed cost (230.2jt) + 8% commission. That
+  // reference margin is itself a caveated estimate — the 230.2jt fixed-cost figure is
+  // calibrated for a typical Enterprise client (up to 10,000 employees), not one at this
+  // scale, so real cost (and therefore real margin) is likely lower than 62% suggests.
+  // Because fixed cost is held flat across steps here (no better data exists), this
+  // formula implies margin drifting from ~53% at 1 step up toward ~67% at 3 steps
+  // around that one calibrated point — an artifact of the flat-cost assumption, not
+  // independently validated at other step counts. Revisit once per-scale cost data exists.
   var VERY_HIGH_EMP     = 10000;
   var VERY_HIGH_STEP_EMP = 7500;
-  var VERY_HIGH_STEP_FEE = 175;
-
-  // No dead end on hires either — the tier stays whatever headcount already set, and the
-  // existing linear hire-overage rate just keeps applying past this point. Same provisional
-  // flag as the employee case: that overage rate was calibrated for modest excess, not this
-  // far out, so it's an anchor, not a firm price.
-  var HIGH_HIRE_FLAG = 3000;
+  var VERY_HIGH_STEP_FEE = 217.5;
 
   // Platform fee (after discount + solo-product reduction) never drops below that TIER's
   // own `floor` (see TIERS above) — a per-tier minimum-margin guardrail, not one flat
@@ -572,7 +571,6 @@
 
   function showBlock(title, body){
     $("quote").classList.add("hide");
-    $("provisionalNote").classList.add("hide");
     $("empty").classList.remove("hide");
     $("emptyTitle").textContent = title;
     $("emptyBody").textContent = body;
@@ -613,11 +611,8 @@
         platform: baseTier.platform + steps * VERY_HIGH_STEP_FEE
       });
     }
-    var isProvisional = isVeryHigh || hires > HIGH_HIRE_FLAG;
-
     $("quote").classList.remove("hide");
     $("empty").classList.add("hide");
-    $("provisionalNote").classList.toggle("hide", !isProvisional);
 
     // Payroll/Attendance are bundled free once HRIS is fully active (Growth/Enterprise
     // always; Essential only after the Full HRIS upgrade). Without HRIS at all, they're

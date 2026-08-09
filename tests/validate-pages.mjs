@@ -127,7 +127,7 @@ const calculatorPresentationForbidden = [
 ];
 for (const pattern of calculatorPresentationForbidden) assert.doesNotMatch(index, pattern);
 
-for (const engineToken of ["var TIERS", "var MODULES", "var MAX_DISCOUNT = 0.15", "var VERY_HIGH_EMP", "var HIGH_HIRE_FLAG", "function build()"] ) {
+for (const engineToken of ["var TIERS", "var MODULES", "var MAX_DISCOUNT = 0.15", "var VERY_HIGH_EMP", "function build()"] ) {
   assert.ok(index.includes(engineToken), `Calculator engine token changed or missing: ${engineToken}`);
 }
 // Flat-tier engine (approved V6 book): no per-employee/per-hire marginal meters.
