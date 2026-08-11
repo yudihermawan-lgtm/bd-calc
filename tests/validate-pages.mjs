@@ -85,7 +85,7 @@ assert.match(index, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "
 
 assert.equal((guide.match(/class="comparison-row"/g) || []).length, 7, "Comparison table now 7 rows — added Integration (included on every tier) as its own row instead of a footnote mention");
 assert.equal((guide.match(/class="addon-item"/g) || []).length, 15, "Added Multi-entity as a per-instance, AM-mediated add-on (not a flat included count, per the tech team's own tenant-provisioning and pricing guidance)");
-assert.equal((guide.match(/class="overage-item"/g) || []).length, 7);
+assert.doesNotMatch(guide, /class="overage-item"|class="overage"/, "Usage-above-quota section removed — overage specifics live in the calculator, not the static guide");
 assert.equal((guide.match(/class="payment-item"/g) || []).length, 9);
 assert.equal((guide.match(/class="scope-note"/g) || []).length, 4);
 
