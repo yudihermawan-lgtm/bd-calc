@@ -83,7 +83,7 @@ assert.match(guide, /\.package-price\{font-size:clamp\(var\(--font-price-mobile\
 assert.match(guide, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "Guide must declare a self-contained favicon");
 assert.match(index, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "Calculator must declare a self-contained favicon");
 
-assert.equal((guide.match(/class="comparison-row"/g) || []).length, 5, "Comparison table now 5 rows — HRIS row removed (reflected live via the calculator's product toggle instead), candidate-processing replaced with headcount/hire ranges, admin-users row removed");
+assert.equal((guide.match(/class="comparison-row"/g) || []).length, 7, "Comparison table now 7 rows — added Integration (included on every tier) as its own row instead of a footnote mention");
 assert.equal((guide.match(/class="addon-item"/g) || []).length, 15, "Added Multi-entity as a per-instance, AM-mediated add-on (not a flat included count, per the tech team's own tenant-provisioning and pricing guidance)");
 assert.equal((guide.match(/class="overage-item"/g) || []).length, 7);
 assert.equal((guide.match(/class="payment-item"/g) || []).length, 9);
