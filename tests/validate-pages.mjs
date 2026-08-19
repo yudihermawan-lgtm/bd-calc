@@ -102,9 +102,10 @@ for (const required of ["Essential", "Growth", "Enterprise", "ATS", "HRIS", "PMS
 
 assert.doesNotMatch(guide, /Reimbursement|reimbursement/, "Reimbursement feature removed from the guide — still in development, ships October");
 assert.doesNotMatch(index, /adminsCap|scAdmins|<dt>Admin users<\/dt>/, "Admin users are unlimited — cap removed from the scope box and pricing engine");
+assert.doesNotMatch(index, /scCandidates|<dt>Candidate processing<\/dt>|candidates:"/, "Candidate processing removed from the scope box — read-only stat, didn't drive pricing, cut for less UI friction");
 assert.match(index, /support:"WhatsApp, working hours"/, "Essential tier now includes WhatsApp support");
-assert.equal((index.match(/<div><dt>[^<]+<\/dt><dd id="sc\w+">/g) || []).length, 4, "Scope box item count changed — check .scope-grid's grid-template-columns still matches");
-assert.match(index, /\.scope-grid\{[^}]*grid-template-columns:repeat\(4,/, "Scope box column count must match its 4 items");
+assert.equal((index.match(/<div><dt>[^<]+<\/dt><dd id="sc\w+">/g) || []).length, 3, "Scope box item count changed — check .scope-grid's grid-template-columns still matches");
+assert.match(index, /\.scope-grid\{[^}]*grid-template-columns:repeat\(3,/, "Scope box column count must match its 3 items");
 
 const forbidden = [
   /estimated y1 profit/i,
