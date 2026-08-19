@@ -140,7 +140,7 @@
   .kpi.dark{background:var(--indigo);border-color:var(--indigo);box-shadow:0 14px 30px rgba(26,31,113,.16)}
   .kpi.dark .k{color:#A9AEDB}
   .kpi.dark .v{color:#fff}
-  .scope-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 26px}
+  .scope-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 26px}
   .scope-grid div{background:var(--shade);border:1px solid rgba(26,31,113,.04);border-radius:12px;padding:12px 13px}
   .scope-grid dt{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0}
   .scope-grid dd{margin:6px 0 0;font-size:13px;font-weight:700;color:var(--indigo);line-height:1.35}
@@ -348,6 +348,7 @@
           </div>
 
           <dl class="scope-grid" id="scopeBox" aria-label="What's included in this tier">
+            <div><dt>ATS</dt><dd id="scAts">&mdash;</dd></div>
             <div><dt>HRIS</dt><dd id="scHris">&mdash;</dd></div>
             <div><dt>Branches / locations</dt><dd id="scBranches">&mdash;</dd></div>
             <div><dt>Support</dt><dd id="scSupport">&mdash;</dd></div>
@@ -696,6 +697,7 @@
     $("kSetup").textContent = jt(setupFee);
     $("kTcv").textContent   = jt(tcv);
 
+    $("scAts").textContent        = ats ? "Included" : "Not selected";
     $("scHris").textContent       = hris ? t.scope.hris : "Not selected";
     $("scBranches").textContent   = "Up to " + n0(t.branchesCap);
     $("scSupport").textContent    = t.scope.support;
