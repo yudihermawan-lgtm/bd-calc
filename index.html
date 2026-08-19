@@ -140,7 +140,7 @@
   .kpi.dark{background:var(--indigo);border-color:var(--indigo);box-shadow:0 14px 30px rgba(26,31,113,.16)}
   .kpi.dark .k{color:#A9AEDB}
   .kpi.dark .v{color:#fff}
-  .scope-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:0 0 26px}
+  .scope-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:0 0 26px}
   .scope-grid div{background:var(--shade);border:1px solid rgba(26,31,113,.04);border-radius:12px;padding:12px 13px}
   .scope-grid dt{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0}
   .scope-grid dd{margin:6px 0 0;font-size:13px;font-weight:700;color:var(--indigo);line-height:1.35}
@@ -350,7 +350,6 @@
           <dl class="scope-grid" id="scopeBox" aria-label="What's included in this tier">
             <div><dt>Candidate processing</dt><dd id="scCandidates">&mdash;</dd></div>
             <div><dt>HRIS</dt><dd id="scHris">&mdash;</dd></div>
-            <div><dt>Admin users</dt><dd id="scAdmins">&mdash;</dd></div>
             <div><dt>Branches / locations</dt><dd id="scBranches">&mdash;</dd></div>
             <div><dt>Support</dt><dd id="scSupport">&mdash;</dd></div>
           </dl>
@@ -408,9 +407,9 @@
   // ---- APPROVED V6 PRICE BOOK (source: jobseeker_v6_pricing_components.xlsx —
   // "Pricing Summary" / "Tier Scope" / "Add-ons & Overage", CEO + Finance signed off) ----
   // Y1 = Platform Fee + Setup Fee. Tier is set by HEADCOUNT only — that's what tracks
-  // HRIS/deployment scope (admin users, branches, support level). Annual hires, admin
-  // users, and branches are bundled up to each tier's cap; beyond the cap they add a
-  // small overage (Add-ons & Overage tab), never a full extra tier.
+  // HRIS/deployment scope (branches, support level). Annual hires and branches are
+  // bundled up to each tier's cap; beyond the cap they add a small overage (Add-ons &
+  // Overage tab), never a full extra tier. Admin users are unlimited — no cap, no overage.
   // Each tier's `floor` is a minimum-margin platform-fee guardrail, not an arbitrary
   // number — it's the platform fee below which that tier's own fixed costs (BD
   // acquisition, CS, IT allocation) push margin under ~20%. Full derivation is in the
@@ -426,13 +425,13 @@
   // real Payroll/Attendance utilization data exists. Essential is unaffected because its
   // default "Basic/limited" HRIS does not bundle them (see Full HRIS upgrade below).
   var TIERS = [
-    {name:"Essential", empLo:1,    empHi:500,   hireHi:150,  adminsCap:3,  branchesCap:3,
+    {name:"Essential", empLo:1,    empHi:500,   hireHi:150,  branchesCap:3,
      platform:110, setup:25, floor:110,
-     scope:{candidates:"Up to 1,500 / month", hris:"Basic / limited", support:"Ticket / email"}},
-    {name:"Growth",     empLo:501, empHi:2000,  hireHi:600,  adminsCap:10, branchesCap:10,
+     scope:{candidates:"Up to 1,500 / month", hris:"Basic / limited", support:"WhatsApp, working hours"}},
+    {name:"Growth",     empLo:501, empHi:2000,  hireHi:600,  branchesCap:10,
      platform:215, setup:50, floor:200,
      scope:{candidates:"Up to 5,000 / month", hris:"Included", support:"WhatsApp priority, working hours"}},
-    {name:"Enterprise", empLo:2001,empHi:10000, hireHi:3000, adminsCap:50, branchesCap:100,
+    {name:"Enterprise", empLo:2001,empHi:10000, hireHi:3000, branchesCap:100,
      platform:390, setup:100, floor:275,
      scope:{candidates:"Up to 20,000 / month", hris:"Included", support:"Dedicated AM, working-hours SLA"}}
   ];
@@ -469,9 +468,8 @@
   // Branches is taken straight from Add-ons & Overage. The hire rate is an illustrative
   // translation from "Extra processed candidates — Rp2-3jt/1,000" assuming a typical
   // screening-to-hire funnel — replace with a real conversion ratio when available.
-  // (Admin-user overage was dropped: it's an internal system-configuration decision made
-  // during onboarding, not something a rep knows at quoting time — see the "not relevant"
-  // call. Admin cap is still shown in the scope box as reference, just never billed here.)
+  // (Admin users are unlimited as of 2026-08-19 — no cap, no overage, removed from the
+  // scope box entirely.)
   var HIRE_OVERAGE_RATE    = 0.015; // ~Rp15,000 / extra hire beyond the tier's cap
   var BRANCH_OVERAGE_RATE  = 1;     // Rp1jt / extra branch / year
 
@@ -701,7 +699,6 @@
 
     $("scCandidates").textContent = t.scope.candidates;
     $("scHris").textContent       = hris ? t.scope.hris : "Not selected";
-    $("scAdmins").textContent     = "Up to " + n0(t.adminsCap);
     $("scBranches").textContent   = "Up to " + n0(t.branchesCap);
     $("scSupport").textContent    = t.scope.support;
 

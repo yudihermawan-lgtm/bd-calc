@@ -54,7 +54,7 @@ assert.match(guide, /const DEFAULT_LANGUAGE = "id";/);
 assert.match(guide, /aria-pressed/);
 assert.match(guide, /prefers-reduced-motion/);
 
-for (const id of ["packages", "compare", "addons", "payments", "guideCta"]) {
+for (const id of ["packages", "compare", "addons", "guideCta"]) {
   assert.match(guide, new RegExp(`id=["']${id}["']`), `Missing graphical guide section: ${id}`);
 }
 
@@ -84,24 +84,27 @@ assert.match(guide, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "
 assert.match(index, /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+">/, "Calculator must declare a self-contained favicon");
 
 assert.equal((guide.match(/class="comparison-row"/g) || []).length, 7, "Comparison table now 7 rows — added Integration (included on every tier) as its own row instead of a footnote mention");
-assert.equal((guide.match(/class="addon-item"/g) || []).length, 15, "Added Multi-entity as a per-instance, AM-mediated add-on (not a flat included count, per the tech team's own tenant-provisioning and pricing guidance)");
+assert.equal((guide.match(/class="addon-item"/g) || []).length, 13, "WhatsApp automation and AI screening automation removed — neither has launched yet");
 assert.doesNotMatch(guide, /class="overage-item"|class="overage"/, "Usage-above-quota section removed — overage specifics live in the calculator, not the static guide");
-assert.equal((guide.match(/class="payment-item"/g) || []).length, 9);
-assert.equal((guide.match(/class="scope-note"/g) || []).length, 4);
+assert.doesNotMatch(guide, /class="payment-item"|class="scope-note"|id=["']payments["']/, "Payment terms section removed — now handled directly by BD Sales, not documented in the guide");
 
 // Comparison table is short enough (7 rows) to show directly — no disclosure/toggle needed.
 assert.doesNotMatch(guide, /id=["']comparisonDetails["']/, "Comparison table must not be hidden behind a disclosure again");
-for (const disclosure of ["addonDetails", "paymentDetails"]) {
-  assert.match(guide, new RegExp(`id=["']${disclosure}["']`));
-}
+assert.match(guide, /id=["']addonDetails["']/);
 
 for (const price of ["Rp110 juta", "Rp25 juta", "Rp135 juta", "Rp215 juta", "Rp50 juta", "Rp265 juta", "Rp390 juta", "Rp100 juta", "Rp490 juta"]) {
   assert.ok(guide.includes(price), `Missing tier price: ${price}`);
 }
 
-for (const required of ["Essential", "Growth", "Enterprise", "ATS", "HRIS", "PMS", "LMS", "PPh 23", "Net-30", "Net-60"]) {
+for (const required of ["Essential", "Growth", "Enterprise", "ATS", "HRIS", "PMS", "LMS"]) {
   assert.ok(guide.includes(required), `Missing workbook topic: ${required}`);
 }
+
+assert.doesNotMatch(guide, /Reimbursement|reimbursement/, "Reimbursement feature removed from the guide — still in development, ships October");
+assert.doesNotMatch(index, /adminsCap|scAdmins|<dt>Admin users<\/dt>/, "Admin users are unlimited — cap removed from the scope box and pricing engine");
+assert.match(index, /support:"WhatsApp, working hours"/, "Essential tier now includes WhatsApp support");
+assert.equal((index.match(/<div><dt>[^<]+<\/dt><dd id="sc\w+">/g) || []).length, 4, "Scope box item count changed — check .scope-grid's grid-template-columns still matches");
+assert.match(index, /\.scope-grid\{[^}]*grid-template-columns:repeat\(4,/, "Scope box column count must match its 4 items");
 
 const forbidden = [
   /estimated y1 profit/i,
