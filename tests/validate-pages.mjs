@@ -100,7 +100,17 @@ for (const required of ["Essential", "Growth", "Enterprise", "ATS", "HRIS", "PMS
   assert.ok(guide.includes(required), `Missing workbook topic: ${required}`);
 }
 
-assert.doesNotMatch(guide, /Reimbursement|reimbursement/, "Reimbursement feature removed from the guide — still in development, ships October");
+// Reimbursement reappears as of 2026-08-20 as a line item inside the new Payroll feature card
+// (payslip/allowance/reimbursement/taxes/business trip) — an explicit, deliberate reversal of the
+// 2026-08-19 removal of the standalone Reimbursement card, not a regression.
+assert.match(guide, /"feat\.payroll":"Payroll","feat\.payroll\.desc":"[^"]*[Rr]eimbursement[^"]*"/);
+assert.match(guide, /"feat\.attendance":"Kehadiran","feat\.attendance\.desc":"[^"]*shift[^"]*"/i);
+const hrisCardOrder = guide.match(/id="hrisFeatures"[^>]*>(.*?)<\/div><\/div>/s)?.[1] ?? "";
+assert.deepEqual(
+  [...hrisCardOrder.matchAll(/data-i18n="(feat\.\w+)"/g)].map((m) => m[1]),
+  ["feat.hrisSetting", "feat.ess", "feat.payroll", "feat.attendance", "feat.hrisReports"],
+  "HRIS feature card order must be Setting, ESS, Payroll, Attendance, then Reports last",
+);
 assert.doesNotMatch(index, /adminsCap|scAdmins|<dt>Admin users<\/dt>/, "Admin users are unlimited — cap removed from the scope box and pricing engine");
 assert.doesNotMatch(index, /scCandidates|<dt>Candidate processing<\/dt>|candidates:"/, "Candidate processing removed from the scope box — read-only stat, didn't drive pricing, cut for less UI friction");
 assert.match(index, /support:"WhatsApp, working hours"/, "Essential tier now includes WhatsApp support");
